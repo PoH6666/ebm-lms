@@ -199,6 +199,20 @@
             return url.toString();
         }
 
+        // ─── SAVE USER ────────────────────────────────────────────────────
+        function saveUser(data) {
+            // Store full user object under one key so dashboard can read it
+            const user = {
+                id:         data.id,
+                first_name: data.first_name,
+                last_name:  data.last_name,
+                name:       data.name,
+                role:       data.role,
+                school_id:  data.school_id || ''
+            };
+            localStorage.setItem('ebm_user', JSON.stringify(user));
+        }
+
         // ─── LOGIN ────────────────────────────────────────────────────────
         async function handleLogin() {
             const email    = document.getElementById('login-email').value.trim();
@@ -227,12 +241,8 @@
                 }
 
                 if (data.status === 'success') {
-                    sessionStorage.setItem('user_name',  data.data.name);
-                    sessionStorage.setItem('user_role',  data.data.role);
-                    sessionStorage.setItem('user_id',    data.data.id);
-                    sessionStorage.setItem('school_id',  data.data.school_id);
-
-                    showToast(`Welcome back, ${data.data.name.split(' ')[0]}! 👋`, 'success');
+                    saveUser(data.data);
+                    showToast(`Welcome back, ${data.data.first_name || data.data.name.split(' ')[0]}! 👋`, 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1200);
                 } else {
                     showToast(data.message || 'Login failed. Please try again.', 'error');
@@ -281,10 +291,7 @@
                 }
 
                 if (data.status === 'success') {
-                    sessionStorage.setItem('user_name', data.data.name);
-                    sessionStorage.setItem('user_role', data.data.role);
-                    sessionStorage.setItem('user_id',   data.data.id);
-
+                    saveUser(data.data);
                     showToast(`Account created! Welcome, ${first_name}! 🎉`, 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1200);
                 } else {
