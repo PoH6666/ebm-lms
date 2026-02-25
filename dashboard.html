@@ -37,7 +37,7 @@
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">🔔</span> Announcements
-                <span class="badge">3</span>
+                <span class="badge">0</span>
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📅</span> Schedule
@@ -54,13 +54,13 @@
 
         <div class="sidebar-footer">
             <div class="user-info">
-                <div class="user-avatar">JD</div>
+                <div class="user-avatar" id="sidebarAvatar">?</div>
                 <div class="user-details">
-                    <div class="user-name">Juan Dela Cruz</div>
-                    <div class="user-role">Student</div>
+                    <div class="user-name" id="sidebarName">Loading...</div>
+                    <div class="user-role" id="sidebarRole">—</div>
                 </div>
             </div>
-            <a href="login.html" class="logout-btn" title="Logout">⏻</a>
+            <a href="login.html" class="logout-btn" title="Logout" id="logoutBtn">⏻</a>
         </div>
     </aside>
 
@@ -70,8 +70,8 @@
         <!-- TOP BAR -->
         <header class="topbar">
             <div class="topbar-left">
-                <h1>Good morning, Juan! 👋</h1>
-                <p>Here's what's happening today — Monday, February 2025</p>
+                <h1 id="greetingText">Good morning! 👋</h1>
+                <p id="greetingDate">Here's what's happening today</p>
             </div>
             <div class="topbar-right">
                 <div class="search-box">
@@ -87,34 +87,34 @@
             <div class="stat-card blue">
                 <div class="stat-icon">📚</div>
                 <div class="stat-info">
-                    <div class="stat-number">6</div>
+                    <div class="stat-number" id="statModules">0</div>
                     <div class="stat-label">Enrolled Modules</div>
                 </div>
-                <div class="stat-trend">↑ Active</div>
+                <div class="stat-trend">—</div>
             </div>
             <div class="stat-card cyan">
                 <div class="stat-icon">📝</div>
                 <div class="stat-info">
-                    <div class="stat-number">3</div>
+                    <div class="stat-number" id="statTasks">0</div>
                     <div class="stat-label">Pending Tasks</div>
                 </div>
-                <div class="stat-trend">Due soon</div>
+                <div class="stat-trend">—</div>
             </div>
             <div class="stat-card gold">
                 <div class="stat-icon">📊</div>
                 <div class="stat-info">
-                    <div class="stat-number">88%</div>
+                    <div class="stat-number" id="statGrade">0%</div>
                     <div class="stat-label">Average Grade</div>
                 </div>
-                <div class="stat-trend">↑ +2%</div>
+                <div class="stat-trend">—</div>
             </div>
             <div class="stat-card green">
                 <div class="stat-icon">✅</div>
                 <div class="stat-info">
-                    <div class="stat-number">95%</div>
+                    <div class="stat-number" id="statAttendance">0%</div>
                     <div class="stat-label">Attendance Rate</div>
                 </div>
-                <div class="stat-trend">Excellent</div>
+                <div class="stat-trend">—</div>
             </div>
         </section>
 
@@ -127,50 +127,10 @@
                     <h2>My Modules</h2>
                     <a href="module.html" class="card-link">View all →</a>
                 </div>
-                <div class="modules-list">
-                    <div class="module-item" onclick="window.location.href='module.html'">
-                        <div class="module-color blue-dot"></div>
-                        <div class="module-info">
-                            <div class="module-name">Mathematics 101</div>
-                            <div class="module-teacher">Mr. Santos</div>
-                        </div>
-                        <div class="module-progress-wrap">
-                            <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-                            <span class="progress-text">72%</span>
-                        </div>
-                    </div>
-                    <div class="module-item" onclick="window.location.href='module.html'">
-                        <div class="module-color cyan-dot"></div>
-                        <div class="module-info">
-                            <div class="module-name">Science & Technology</div>
-                            <div class="module-teacher">Ms. Reyes</div>
-                        </div>
-                        <div class="module-progress-wrap">
-                            <div class="progress-bar"><div class="progress-fill cyan-fill" style="width:55%"></div></div>
-                            <span class="progress-text">55%</span>
-                        </div>
-                    </div>
-                    <div class="module-item" onclick="window.location.href='module.html'">
-                        <div class="module-color gold-dot"></div>
-                        <div class="module-info">
-                            <div class="module-name">Filipino Literature</div>
-                            <div class="module-teacher">Ms. Garcia</div>
-                        </div>
-                        <div class="module-progress-wrap">
-                            <div class="progress-bar"><div class="progress-fill gold-fill" style="width:90%"></div></div>
-                            <span class="progress-text">90%</span>
-                        </div>
-                    </div>
-                    <div class="module-item" onclick="window.location.href='module.html'">
-                        <div class="module-color purple-dot"></div>
-                        <div class="module-info">
-                            <div class="module-name">English Communication</div>
-                            <div class="module-teacher">Mr. Cruz</div>
-                        </div>
-                        <div class="module-progress-wrap">
-                            <div class="progress-bar"><div class="progress-fill purple-fill" style="width:40%"></div></div>
-                            <span class="progress-text">40%</span>
-                        </div>
+                <div class="modules-list" id="modulesList">
+                    <div style="text-align:center; padding: 40px 20px; color: var(--text-muted, #888);">
+                        <div style="font-size:2rem; margin-bottom:8px;">📚</div>
+                        <div>No modules enrolled yet.</div>
                     </div>
                 </div>
             </section>
@@ -184,30 +144,10 @@
                         <h2>Upcoming Tasks</h2>
                         <a href="#" class="card-link">See all →</a>
                     </div>
-                    <div class="tasks-list">
-                        <div class="task-item urgent">
-                            <div class="task-dot"></div>
-                            <div class="task-info">
-                                <div class="task-name">Math Problem Set 3</div>
-                                <div class="task-due">Due: Tomorrow</div>
-                            </div>
-                            <span class="task-badge urgent-badge">Urgent</span>
-                        </div>
-                        <div class="task-item">
-                            <div class="task-dot blue-task"></div>
-                            <div class="task-info">
-                                <div class="task-name">Science Lab Report</div>
-                                <div class="task-due">Due: Feb 28</div>
-                            </div>
-                            <span class="task-badge">Pending</span>
-                        </div>
-                        <div class="task-item">
-                            <div class="task-dot gold-task"></div>
-                            <div class="task-info">
-                                <div class="task-name">Filipino Essay</div>
-                                <div class="task-due">Due: Mar 2</div>
-                            </div>
-                            <span class="task-badge">Pending</span>
+                    <div class="tasks-list" id="tasksList">
+                        <div style="text-align:center; padding: 30px 20px; color: var(--text-muted, #888);">
+                            <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
+                            <div>No pending tasks.</div>
                         </div>
                     </div>
                 </section>
@@ -216,29 +156,12 @@
                 <section class="card announcements-card">
                     <div class="card-header">
                         <h2>Announcements</h2>
-                        <span class="badge-count">3 new</span>
+                        <span class="badge-count" id="annCount">0 new</span>
                     </div>
-                    <div class="announcements-list">
-                        <div class="announcement-item">
-                            <div class="ann-icon">📢</div>
-                            <div class="ann-info">
-                                <div class="ann-title">Midterm Exam Schedule Released</div>
-                                <div class="ann-meta">Admin • 2 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="announcement-item">
-                            <div class="ann-icon">📅</div>
-                            <div class="ann-info">
-                                <div class="ann-title">No classes on Feb 25</div>
-                                <div class="ann-meta">Admin • Yesterday</div>
-                            </div>
-                        </div>
-                        <div class="announcement-item">
-                            <div class="ann-icon">📝</div>
-                            <div class="ann-info">
-                                <div class="ann-title">New Science module uploaded</div>
-                                <div class="ann-meta">Ms. Reyes • 2 days ago</div>
-                            </div>
+                    <div class="announcements-list" id="announcementsList">
+                        <div style="text-align:center; padding: 30px 20px; color: var(--text-muted, #888);">
+                            <div style="font-size:1.5rem; margin-bottom:8px;">🔔</div>
+                            <div>No announcements yet.</div>
                         </div>
                     </div>
                 </section>
@@ -249,18 +172,44 @@
     </main>
 
     <script>
-        // Animate stat numbers
-        document.querySelectorAll('.stat-number').forEach(el => {
-            const target = el.textContent;
-            const isPercent = target.includes('%');
-            const num = parseInt(target);
-            let current = 0;
-            const step = Math.ceil(num / 40);
-            const timer = setInterval(() => {
-                current = Math.min(current + step, num);
-                el.textContent = current + (isPercent ? '%' : '');
-                if (current >= num) clearInterval(timer);
-            }, 30);
+        // ── Load user from localStorage ──────────────────────────
+        const user = JSON.parse(localStorage.getItem('ebm_user') || 'null');
+
+        // If not logged in, redirect to login
+        if (!user || !user.id) {
+            window.location.href = 'login.html';
+        } else {
+            // Support both {first_name, last_name} and legacy {name}
+            const firstName = user.first_name || (user.name ? user.name.split(' ')[0] : 'User');
+            const lastName  = user.last_name  || (user.name ? user.name.split(' ').slice(1).join(' ') : '');
+            const fullName  = (firstName + ' ' + lastName).trim();
+            const role      = user.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Student';
+
+            // Sidebar
+            document.getElementById('sidebarName').textContent = fullName;
+            document.getElementById('sidebarRole').textContent = role;
+            const initials = (firstName[0] || '') + (lastName[0] || '');
+            document.getElementById('sidebarAvatar').textContent = initials.toUpperCase();
+
+            // Greeting
+            const hour = new Date().getHours();
+            const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+            document.getElementById('greetingText').textContent = `Good ${timeOfDay}, ${firstName}! 👋`;
+
+            // Date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', {
+                weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+            });
+            document.getElementById('greetingDate').textContent =
+                `Here's what's happening today — ${dateStr}`;
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('ebm_user');
+            window.location.href = 'login.html';
         });
     </script>
 </body>
