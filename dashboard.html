@@ -21,8 +21,8 @@
             <a href="dashboard.html" class="nav-item active">
                 <span class="nav-icon">🏠</span> Dashboard
             </a>
-            <a href="module.html" class="nav-item">
-                <span class="nav-icon">📚</span> Modules
+            <a href="subject.html" class="nav-item">
+                <span class="nav-icon">📚</span> Subjects
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📝</span> Assignments
@@ -132,8 +132,8 @@
             <!-- MODULES -->
             <section class="card modules-card">
                 <div class="card-header">
-                    <h2 id="modulesCardTitle">My Modules</h2>
-                    <a href="module.html" class="card-link">View all →</a>
+                    <h2 id="modulesCardTitle">My Subjects</h2>
+                    <a href="subject.html" class="card-link">View all →</a>
                 </div>
                 <div class="modules-list" id="modulesList">
                     <div style="text-align:center; padding: 40px 20px; color: #888;">
@@ -256,7 +256,7 @@
                         <div class="module-item" onclick="window.location.href='module.html'">
                             <div class="module-color ${colors[i % colors.length]}"></div>
                             <div class="module-info">
-                                <div class="module-name">${esc(m.title)}</div>
+                                <div class="module-name">${esc(m.subject_name)}</div>
                                 <div class="module-teacher">${esc(m.teacher_name||'—')}</div>
                             </div>
                             <div class="module-progress-wrap">
@@ -276,11 +276,11 @@
         // ── TEACHER dashboard ────────────────────────────────────
         async function loadTeacherDashboard() {
             // Update labels for teacher view
-            document.getElementById('statModulesLabel').textContent = 'My Modules';
-            document.getElementById('modulesCardTitle').textContent  = 'My Modules';
+            document.getElementById('statModulesLabel').textContent = 'My Subjects';
+            document.getElementById('modulesCardTitle').textContent  = 'My Subjects';
 
             try {
-                const res  = await fetch(`${TEACH_API}?action=get_my_modules&teacher_id=${user.id}`);
+                const res  = await fetch(`${TEACH_API}?action=get_my_subjects&teacher_id=${user.id}`);
                 const data = await res.json();
                 const modules = (data.status === 'success') ? data.data : [];
 
@@ -291,13 +291,13 @@
                 if (modules.length === 0) {
                     list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;">
                         <div style="font-size:2rem;margin-bottom:8px;">📦</div>
-                        <div>No modules yet. <a href="teacher.html" style="color:#6c63ff;">Create one →</a></div></div>`;
+                        <div>No subjects yet. <a href="teacher.html" style="color:#6c63ff;">Create one →</a></div></div>`;
                 } else {
                     list.innerHTML = modules.slice(0,4).map((m, i) => `
                         <div class="module-item" onclick="window.location.href='teacher.html'">
                             <div class="module-color ${colors[i % colors.length]}"></div>
                             <div class="module-info">
-                                <div class="module-name">${esc(m.title)}</div>
+                                <div class="module-name">${esc(m.subject_name)}</div>
                                 <div class="module-teacher">${esc(m.subject_code||'—')}</div>
                             </div>
                             <div class="module-progress-wrap">
