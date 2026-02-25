@@ -6,18 +6,287 @@
     <title>EBM LMS — Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/dashboard.css">
+    <style>
+        /* ── Topbar ── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .topbar p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: 0.85rem;
+            width: 200px;
+        }
+        .notif-btn {
+            position: relative;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px;
+        }
+        .notif-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* ── Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px;
+            height: 100%;
+        }
+        .stat-card.blue::before   { background: var(--accent); }
+        .stat-card.cyan::before   { background: #5bf0ff; }
+        .stat-card.gold::before   { background: #ffc55b; }
+        .stat-card.green::before  { background: #5bff9a; }
+        .stat-icon { font-size: 1.6rem; }
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .stat-trend {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Content grid ── */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
+        }
+        @media (max-width: 1100px) { .content-grid { grid-template-columns: 1fr; } }
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
+
+        /* ── Card header ── */
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .card-link {
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .card-link:hover { text-decoration: underline; }
+        .badge-count {
+            font-size: 0.75rem;
+            background: rgba(91,127,255,0.15);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* ── Module item ── */
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .module-item:last-child { border-bottom: none; }
+        .module-item:hover { opacity: 0.8; }
+        .module-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .blue-dot   { background: var(--accent); }
+        .cyan-dot   { background: #5bf0ff; }
+        .gold-dot   { background: #ffc55b; }
+        .purple-dot { background: var(--accent2); }
+        .green-dot  { background: #5bff9a; }
+        .pink-dot   { background: #ff5bb8; }
+        .module-info { flex: 1; min-width: 0; }
+        .module-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .module-teacher {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .module-progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .progress-bar {
+            width: 80px;
+            height: 5px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+        .cyan-fill   { background: #5bf0ff; }
+        .gold-fill   { background: #ffc55b; }
+        .purple-fill { background: var(--accent2); }
+        .progress-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            min-width: 28px;
+            text-align: right;
+        }
+
+        /* ── Tasks ── */
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+        .task-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .task-due {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ── Announcements ── */
+        .ann-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .ann-item:last-child { border-bottom: none; }
+        .ann-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .ann-meta {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* ── Badge ── */
+        .badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon">🎓</div>
-            EBM <span>LMS</span>
+        <div class="sidebar-brand">
+            <div class="brand-logo">EB</div>
+            <div class="brand-text">EBM <span class="brand-lms">LMS</span></div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-label">Main</div>
+            <div class="nav-section">Main</div>
             <a href="dashboard.html" class="nav-item active">
                 <span class="nav-icon">🏠</span> Dashboard
             </a>
@@ -31,27 +300,26 @@
                 <span class="nav-icon">📊</span> Grades
             </a>
 
-            <!-- Teacher-only link (shown via JS) -->
-            <div id="teacherNavItem" style="display:none;">
-                <div class="nav-section-label">Teacher</div>
+            <div id="teacherNavSection" style="display:none;">
+                <div class="nav-section">Teacher</div>
                 <a href="teacher.html" class="nav-item">
                     <span class="nav-icon">🧑‍🏫</span> Teacher Panel
                 </a>
             </div>
 
-            <div class="nav-section-label">School</div>
+            <div class="nav-section">School</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">✅</span> Attendance
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">🔔</span> Announcements
-                <span class="badge" id="annBadge">0</span>
+                <span class="badge" id="annBadge" style="display:none;">0</span>
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📅</span> Schedule
             </a>
 
-            <div class="nav-section-label">Account</div>
+            <div class="nav-section">Account</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">👤</span> Profile
             </a>
@@ -61,14 +329,12 @@
         </nav>
 
         <div class="sidebar-footer">
+            <div class="user-avatar" id="sidebarAvatar">?</div>
             <div class="user-info">
-                <div class="user-avatar" id="sidebarAvatar">?</div>
-                <div class="user-details">
-                    <div class="user-name" id="sidebarName">Loading...</div>
-                    <div class="user-role" id="sidebarRole">—</div>
-                </div>
+                <div class="user-name" id="sidebarName">Loading...</div>
+                <div class="user-role" id="sidebarRole">—</div>
             </div>
-            <a href="login.html" class="logout-btn" title="Logout" id="logoutBtn">⏻</a>
+            <button class="logout-btn" id="logoutBtn" title="Logout">⏻</button>
         </div>
     </aside>
 
@@ -96,7 +362,7 @@
                 <div class="stat-icon">📚</div>
                 <div class="stat-info">
                     <div class="stat-number" id="statModules">0</div>
-                    <div class="stat-label" id="statModulesLabel">Enrolled Modules</div>
+                    <div class="stat-label" id="statModulesLabel">Enrolled Subjects</div>
                 </div>
                 <div class="stat-trend" id="statModulesTrend">—</div>
             </div>
@@ -129,17 +395,14 @@
         <!-- MAIN GRID -->
         <div class="content-grid">
 
-            <!-- MODULES -->
+            <!-- SUBJECTS / MODULES -->
             <section class="card modules-card">
                 <div class="card-header">
                     <h2 id="modulesCardTitle">My Subjects</h2>
                     <a href="subject.html" class="card-link">View all →</a>
                 </div>
                 <div class="modules-list" id="modulesList">
-                    <div style="text-align:center; padding: 40px 20px; color: #888;">
-                        <div style="font-size:2rem; margin-bottom:8px;">⏳</div>
-                        <div>Loading...</div>
-                    </div>
+                    <div class="empty">⏳ Loading...</div>
                 </div>
             </section>
 
@@ -152,11 +415,8 @@
                         <h2>Upcoming Tasks</h2>
                         <a href="#" class="card-link">See all →</a>
                     </div>
-                    <div class="tasks-list" id="tasksList">
-                        <div style="text-align:center; padding: 30px 20px; color: #888;">
-                            <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
-                            <div>No pending tasks.</div>
-                        </div>
+                    <div id="tasksList">
+                        <div class="empty">📝 No pending tasks.</div>
                     </div>
                 </section>
 
@@ -166,11 +426,8 @@
                         <h2>Announcements</h2>
                         <span class="badge-count" id="annCount">0 new</span>
                     </div>
-                    <div class="announcements-list" id="announcementsList">
-                        <div style="text-align:center; padding: 30px 20px; color: #888;">
-                            <div style="font-size:1.5rem; margin-bottom:8px;">🔔</div>
-                            <div>No announcements yet.</div>
-                        </div>
+                    <div id="announcementsList">
+                        <div class="empty">🔔 No announcements yet.</div>
                     </div>
                 </section>
 
@@ -180,52 +437,57 @@
     </main>
 
     <script>
-        const TEACH_API = 'https://ebm-lms-production.up.railway.app/api/teacher.php';
-        const AUTH_API  = 'https://ebm-lms-production.up.railway.app/auth/auth.php';
+        const TEACH_API = '/api/teacher.php';
+        const AUTH_API  = '/auth/auth.php';
 
-        // ── Load user ────────────────────────────────────────────
+        // ── Load user ────────────────────────────────────
         const user = JSON.parse(localStorage.getItem('ebm_user') || 'null');
         if (!user || !user.id) { window.location.href = 'login.html'; }
 
-        const firstName = user.first_name || (user.name||'').split(' ')[0] || 'User';
-        const lastName  = user.last_name  || (user.name||'').split(' ').slice(1).join(' ') || '';
+        const firstName = user.first_name || (user.name || '').split(' ')[0] || 'User';
+        const lastName  = user.last_name  || (user.name || '').split(' ').slice(1).join(' ') || '';
         const fullName  = (firstName + ' ' + lastName).trim();
         const role      = user.role || 'student';
-        const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
         // Sidebar
         document.getElementById('sidebarName').textContent   = fullName;
-        document.getElementById('sidebarRole').textContent   = roleLabel;
-        document.getElementById('sidebarAvatar').textContent = ((firstName[0]||'')+(lastName[0]||'')).toUpperCase();
+        document.getElementById('sidebarRole').textContent   = role.charAt(0).toUpperCase() + role.slice(1);
+        document.getElementById('sidebarAvatar').textContent = ((firstName[0]||'') + (lastName[0]||'')).toUpperCase() || '?';
 
-        // Show Teacher Panel link only for teachers/admins
+        // Show teacher nav for teachers/admins
         if (role === 'teacher' || role === 'admin') {
-            document.getElementById('teacherNavItem').style.display = 'block';
+            document.getElementById('teacherNavSection').style.display = 'block';
         }
 
         // Greeting
         const hour = new Date().getHours();
-        const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-        document.getElementById('greetingText').textContent = `Good ${timeOfDay}, ${firstName}! 👋`;
-        const now = new Date();
+        const tod  = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        document.getElementById('greetingText').textContent = `Good ${tod}, ${firstName}! 👋`;
         document.getElementById('greetingDate').textContent =
-            `Here's what's happening today — ${now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}`;
+            `Here's what's happening today — ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}`;
 
         // Logout
-        document.getElementById('logoutBtn').addEventListener('click', e => {
-            e.preventDefault(); localStorage.removeItem('ebm_user'); window.location.href = 'login.html';
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('ebm_user');
+            window.location.href = 'login.html';
         });
 
-        // ── Helpers ──────────────────────────────────────────────
+        // ── Helpers ──────────────────────────────────────
         function esc(s) {
-            if (!s) return '';
-            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
 
-        const colors = ['blue-dot','cyan-dot','gold-dot','purple-dot','green-dot','pink-dot'];
-        const fills  = ['','cyan-fill','gold-fill','purple-fill','',''];
+        const dotColors  = ['blue-dot','cyan-dot','gold-dot','purple-dot','green-dot','pink-dot'];
+        const fillColors = ['','cyan-fill','gold-fill','purple-fill','',''];
 
-        // ── Load data depending on role ──────────────────────────
+        async function postAPI(url, body) {
+            const fd = new FormData();
+            Object.entries(body).forEach(([k,v]) => fd.append(k, v));
+            const res = await fetch(url, { method: 'POST', body: fd });
+            return res.json();
+        }
+
+        // ── Route by role ─────────────────────────────────
         async function loadDashboard() {
             if (role === 'teacher' || role === 'admin') {
                 loadTeacherDashboard();
@@ -234,80 +496,79 @@
             }
         }
 
-        // ── STUDENT dashboard ────────────────────────────────────
+        // ── STUDENT ───────────────────────────────────────
         async function loadStudentDashboard() {
+            const list = document.getElementById('modulesList');
             try {
-                const res  = await fetch(`${AUTH_API}?action=get_enrolled_modules&user_id=${user.id}`);
-                const data = await res.json();
-                const modules = (data.status === 'success') ? data.data : [];
+                const data = await postAPI(AUTH_API, {
+                    action: 'get_enrolled_modules',
+                    user_id: user.id
+                });
+                const modules = data.status === 'success' ? (data.data || data.modules || []) : [];
 
-                // Update stat
                 document.getElementById('statModules').textContent = modules.length;
-                if (modules.length > 0) document.getElementById('statModulesTrend').textContent = '↑ Active';
+                if (modules.length) document.getElementById('statModulesTrend').textContent = '↑ Active';
 
-                // Render modules list
-                const list = document.getElementById('modulesList');
-                if (modules.length === 0) {
-                    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;">
-                        <div style="font-size:2rem;margin-bottom:8px;">📚</div>
-                        <div>No modules enrolled yet.</div></div>`;
-                } else {
-                    list.innerHTML = modules.slice(0,4).map((m, i) => `
-                        <div class="module-item" onclick="window.location.href='module.html'">
-                            <div class="module-color ${colors[i % colors.length]}"></div>
-                            <div class="module-info">
-                                <div class="module-name">${esc(m.subject_name)}</div>
-                                <div class="module-teacher">${esc(m.teacher_name||'—')}</div>
-                            </div>
-                            <div class="module-progress-wrap">
-                                <div class="progress-bar">
-                                    <div class="progress-fill ${fills[i % fills.length]}" style="width:${m.progress||0}%"></div>
-                                </div>
-                                <span class="progress-text">${m.progress||0}%</span>
-                            </div>
-                        </div>`).join('');
+                if (!modules.length) {
+                    list.innerHTML = '<div class="empty">📚 No subjects enrolled yet.</div>';
+                    return;
                 }
+                list.innerHTML = modules.slice(0,5).map((m, i) => `
+                    <div class="module-item" onclick="window.location.href='subject.html'">
+                        <div class="module-color ${dotColors[i % dotColors.length]}"></div>
+                        <div class="module-info">
+                            <div class="module-name">${esc(m.subject_name)}</div>
+                            <div class="module-teacher">${esc(m.teacher_name || '—')}</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <div class="progress-bar">
+                                <div class="progress-fill ${fillColors[i % fillColors.length]}" style="width:${m.progress||0}%"></div>
+                            </div>
+                            <span class="progress-text">${m.progress||0}%</span>
+                        </div>
+                    </div>`).join('');
             } catch(e) {
-                document.getElementById('modulesList').innerHTML =
-                    '<div style="text-align:center;padding:40px 20px;color:#888;">Could not load modules.</div>';
+                list.innerHTML = '<div class="empty">Could not load subjects.</div>';
             }
         }
 
-        // ── TEACHER dashboard ────────────────────────────────────
+        // ── TEACHER ───────────────────────────────────────
         async function loadTeacherDashboard() {
-            // Update labels for teacher view
-            document.getElementById('statModulesLabel').textContent = 'My Subjects';
-            document.getElementById('modulesCardTitle').textContent  = 'My Subjects';
+            document.getElementById('statModulesLabel').textContent  = 'My Subjects';
+            document.getElementById('modulesCardTitle').textContent   = 'My Subjects';
+            document.querySelector('.card-link').href                 = 'teacher.html';
 
+            const list = document.getElementById('modulesList');
             try {
-                const res  = await fetch(`${TEACH_API}?action=get_my_subjects&teacher_id=${user.id}`);
-                const data = await res.json();
-                const modules = (data.status === 'success') ? data.data : [];
+                // POST — teacher_id goes in body, not query string
+                const data = await postAPI(TEACH_API, {
+                    action: 'get_my_subjects',
+                    teacher_id: user.id
+                });
 
-                document.getElementById('statModules').textContent = modules.length;
-                if (modules.length > 0) document.getElementById('statModulesTrend').textContent = '↑ Active';
+                // API returns { status:'success', subjects:[...] }
+                const subjects = data.status === 'success' ? (data.subjects || []) : [];
 
-                const list = document.getElementById('modulesList');
-                if (modules.length === 0) {
-                    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;">
-                        <div style="font-size:2rem;margin-bottom:8px;">📦</div>
-                        <div>No subjects yet. <a href="teacher.html" style="color:#6c63ff;">Create one →</a></div></div>`;
-                } else {
-                    list.innerHTML = modules.slice(0,4).map((m, i) => `
-                        <div class="module-item" onclick="window.location.href='teacher.html'">
-                            <div class="module-color ${colors[i % colors.length]}"></div>
-                            <div class="module-info">
-                                <div class="module-name">${esc(m.subject_name)}</div>
-                                <div class="module-teacher">${esc(m.subject_code||'—')}</div>
-                            </div>
-                            <div class="module-progress-wrap">
-                                <span class="progress-text" style="color:#6c63ff;">Manage →</span>
-                            </div>
-                        </div>`).join('');
+                document.getElementById('statModules').textContent = subjects.length;
+                if (subjects.length) document.getElementById('statModulesTrend').textContent = '↑ Active';
+
+                if (!subjects.length) {
+                    list.innerHTML = `<div class="empty">📦 No subjects yet. <a href="teacher.html" style="color:var(--accent);">Create one →</a></div>`;
+                    return;
                 }
+                list.innerHTML = subjects.slice(0,5).map((s, i) => `
+                    <div class="module-item" onclick="window.location.href='teacher.html'">
+                        <div class="module-color ${dotColors[i % dotColors.length]}"></div>
+                        <div class="module-info">
+                            <div class="module-name">${esc(s.subject_name)}</div>
+                            <div class="module-teacher">${esc(s.subject_code || '—')}</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <span class="progress-text" style="color:var(--accent);">Manage →</span>
+                        </div>
+                    </div>`).join('');
             } catch(e) {
-                document.getElementById('modulesList').innerHTML =
-                    '<div style="text-align:center;padding:40px 20px;color:#888;">Could not load modules.</div>';
+                list.innerHTML = '<div class="empty">Could not load subjects.</div>';
             }
         }
 
