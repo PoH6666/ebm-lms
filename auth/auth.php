@@ -13,6 +13,7 @@ require_once __DIR__ . '/../config/database.php';
 function respond($status, $message, $data = null) {
     ob_end_clean();
     header('Content-Type: application/json');
+    header('Access-Control-Allow-Origin: *');
     http_response_code($status === 'success' ? 200 : 400);
     $res = ['status' => $status, 'message' => $message];
     if ($data !== null) $res['data'] = $data;
@@ -66,11 +67,13 @@ switch ($action) {
         $_SESSION['user_email'] = $user['email'];
 
         respond('success', 'Login successful!', [
-            'id'        => $user['id'],
-            'name'      => $user['first_name'] . ' ' . $user['last_name'],
-            'email'     => $user['email'],
-            'role'      => $user['role'],
-            'school_id' => $user['school_id']
+            'id'         => $user['id'],
+            'first_name' => $user['first_name'],
+            'last_name'  => $user['last_name'],
+            'name'       => $user['first_name'] . ' ' . $user['last_name'],
+            'email'      => $user['email'],
+            'role'       => $user['role'],
+            'school_id'  => $user['school_id']
         ]);
         break;
 
@@ -116,14 +119,64 @@ switch ($action) {
             $_SESSION['user_email'] = $email;
 
             respond('success', 'Account created successfully!', [
-                'id'    => $new_id,
-                'name'  => "$first_name $last_name",
-                'email' => $email,
-                'role'  => $role
+                'id'         => $new_id,
+                'first_name' => $first_name,
+                'last_name'  => $last_name,
+                'name'       => "$first_name $last_name",
+                'email'      => $email,
+                'role'       => $role,
+                'school_id'  => $school_id
             ]);
         } else {
             respond('error', 'Failed to create account. Please try again.');
         }
+        break;
+
+    case 'get_enrolled_modules':
+        $user_id = getParam('user_id');
+
+        if (empty($user_id)) {
+            respond('error', 'user_id is required.');
+        }
+
+        $conn = getConnection();
+
+        // Get modules the student is enrolled in via the enrollments table
+        $stmt = $conn->prepare("
+            SELECT
+                m.id,
+                m.title,
+                m.description,
+                m.subject_code,
+                m.teacher_id,
+                CONCAT(t.first_name, ' ', t.last_name) AS teacher_name,
+                e.enrolled_at,
+                COALESCE(
+                    ROUND(
+                        (SELECT COUNT(*) FROM lesson_progress lp
+                         JOIN lessons l ON lp.lesson_id = l.id
+                         WHERE lp.user_id = ? AND l.module_id = m.id AND lp.completed = 1)
+                        /
+                        NULLIF((SELECT COUNT(*) FROM lessons l2 WHERE l2.module_id = m.id), 0)
+                        * 100
+                    ), 0
+                ) AS progress
+            FROM enrollments e
+            JOIN modules m ON e.module_id = m.id
+            LEFT JOIN users t ON m.teacher_id = t.id
+            WHERE e.student_id = ?
+            ORDER BY e.enrolled_at DESC
+        ");
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $modules = [];
+        while ($row = $result->fetch_assoc()) {
+            $modules[] = $row;
+        }
+
+        respond('success', 'Enrolled modules retrieved.', $modules);
         break;
 
     case 'logout':
@@ -144,5 +197,5 @@ switch ($action) {
         break;
 
     default:
-        respond('error', 'Invalid action. Use: login, register, logout, check');
+        respond('error', 'Invalid action.');
 }
