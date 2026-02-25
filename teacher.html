@@ -5,444 +5,351 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EBM LMS — Teacher Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="CSS/dashboard.css">
 <style>
-  /* ── Teacher Panel Overrides ── */
-  .teacher-main { padding: 32px 36px; max-width: 900px; }
-  .panel-header  { margin-bottom: 28px; }
-  .panel-header h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); }
-  .panel-header p  { color: var(--text-muted); margin-top: 4px; }
-
-  /* Tabs */
-  .tabs { display: flex; gap: 6px; margin-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.07); padding-bottom: 0; flex-wrap: wrap; }
-  .tab-btn {
-    padding: 10px 18px; border: none; background: transparent;
-    color: var(--text-muted); font-family: var(--font); font-size: .875rem; font-weight: 500;
-    cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
-    transition: all .2s; border-radius: 6px 6px 0 0; display: flex; align-items: center; gap: 7px;
-  }
-  .tab-btn:hover  { color: var(--text-primary); background: rgba(255,255,255,.04); }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; }
-
-  /* Cards */
-  .card {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 14px; padding: 28px; margin-bottom: 24px;
-  }
-  .card h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-
-  /* Form */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-grid.full { grid-template-columns: 1fr; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group label { font-size: .78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
-    border-radius: 8px; padding: 11px 14px; color: var(--text-primary);
-    font-family: var(--font); font-size: .9rem; width: 100%;
-    transition: border-color .2s;
-  }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus { outline: none; border-color: var(--accent); }
-  .form-group textarea { resize: vertical; min-height: 90px; }
-  .form-group select option { background: #111836; }
-
-  /* Buttons */
-  .btn-primary {
-    padding: 12px 24px; background: var(--accent); color: #fff;
-    border: none; border-radius: 10px; font-family: var(--font); font-size: .9rem; font-weight: 600;
-    cursor: pointer; transition: opacity .2s; display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
-  }
-  .btn-primary:hover { opacity: .85; }
-  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-
-  /* Subject list */
-  .subject-list { display: grid; gap: 12px; margin-top: 16px; }
-  .subject-card {
-    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
-    border-radius: 10px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
-  }
-  .subject-card .sname { font-weight: 600; color: var(--text-primary); }
-  .subject-card .scode { font-size: .8rem; color: var(--accent); font-weight: 600; margin-top: 2px; }
-  .subject-card .smeta { font-size: .78rem; color: var(--text-muted); margin-top: 4px; }
-  .subject-card .sdesc { font-size: .82rem; color: var(--text-muted); margin-top: 4px; }
-
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 28px; right: 28px; z-index: 999;
-    background: #1a2a1a; border: 1px solid #2d5a2d; color: #7dde7d;
-    padding: 14px 20px; border-radius: 10px; font-size: .875rem; font-weight: 500;
-    display: none; max-width: 320px; box-shadow: 0 8px 32px rgba(0,0,0,.4);
-  }
-  .toast.error { background: #2a1a1a; border-color: #5a2d2d; color: #de7d7d; }
-  .toast.show { display: block; animation: slideIn .3s ease; }
-  @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-  /* Question builder */
-  .question-block {
-    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
-    border-radius: 8px; padding: 16px; margin-bottom: 12px;
-  }
-  .question-block input { margin-bottom: 8px; }
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
-  .option-row { display: flex; align-items: center; gap: 8px; }
-  .option-row input[type=radio] { width: auto; flex-shrink: 0; cursor: pointer; }
-  .option-row input[type=text] { flex: 1; }
-  .add-option, .remove-q {
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    color: var(--text-muted); border-radius: 6px; padding: 5px 12px;
-    font-size: .78rem; cursor: pointer; transition: all .2s;
-  }
-  .add-option:hover { color: var(--text-primary); }
-  .remove-q:hover   { color: #de7d7d; border-color: #de7d7d; }
-  .add-question-btn {
-    background: rgba(255,255,255,.05); border: 1px dashed rgba(255,255,255,.2);
-    color: var(--text-muted); border-radius: 8px; padding: 10px;
-    font-size: .85rem; cursor: pointer; width: 100%; transition: all .2s; margin-bottom: 12px;
-  }
-  .add-question-btn:hover { color: var(--text-primary); border-color: var(--accent); }
-
-  /* Student list */
-  .student-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 16px; background: rgba(255,255,255,.03); border-radius: 8px; margin-bottom: 8px;
-    border: 1px solid rgba(255,255,255,.06);
-  }
-  .student-row .sinfo .name { font-weight: 500; color: var(--text-primary); font-size: .9rem; }
-  .student-row .sinfo .email { font-size: .78rem; color: var(--text-muted); }
-  .empty-msg { color: var(--text-muted); font-size: .875rem; text-align: center; padding: 20px 0; }
-
-  @media (max-width: 640px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .options-grid { grid-template-columns: 1fr; }
-  }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a0f2c;--navy-mid:#111836;--accent:#5b7fff;--accent2:#7c5bff;
+  --text-primary:#e8eaf6;--text-muted:#8892b0;
+  --card-bg:rgba(255,255,255,.04);--card-border:rgba(255,255,255,.08);
+  --font:'Sora','DM Sans',sans-serif;
+}
+body{font-family:var(--font);background:var(--navy);color:var(--text-primary);display:flex;min-height:100vh;overflow-x:hidden}
+/* SIDEBAR */
+.sidebar{width:230px;min-width:230px;background:var(--navy-mid);border-right:1px solid var(--card-border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:hidden}
+.sidebar-brand{padding:22px 20px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--card-border)}
+.brand-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:#fff}
+.brand-text{font-size:1rem;font-weight:700;display:flex;gap:3px}
+.brand-lms{color:var(--accent);font-weight:300}
+.sidebar-nav{flex:1;padding:14px 12px;overflow-y:auto}
+.nav-section{font-size:.63rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;padding:12px 8px 5px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--text-muted);text-decoration:none;font-size:.85rem;font-weight:500;transition:all .2s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.06);color:var(--text-primary)}
+.nav-item.active{background:rgba(91,127,255,.15);color:var(--accent)}
+.nav-icon{font-size:1rem;width:20px;text-align:center}
+.sidebar-footer{padding:12px 14px;border-top:1px solid var(--card-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;min-width:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#fff;flex-shrink:0}
+.user-info{flex:1;min-width:0;overflow:hidden}
+.user-name{font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:.7rem;color:var(--text-muted)}
+.logout-btn{background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;flex-shrink:0;padding:4px;transition:color .2s}
+.logout-btn:hover{color:#de7d7d}
+/* MAIN */
+.main-content{flex:1;overflow-y:auto;padding:32px 36px;max-width:960px}
+.panel-header{margin-bottom:28px}
+.panel-header h1{font-size:1.75rem;font-weight:700}
+.panel-header p{color:var(--text-muted);margin-top:4px;font-size:.9rem}
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--card-border);flex-wrap:wrap}
+.tab-btn{padding:10px 16px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font);font-size:.85rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--text-primary);background:rgba(255,255,255,.04)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+/* CARD */
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:26px;margin-bottom:20px}
+.card h3{font-size:1rem;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.form-row.single{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em}
+.form-group input,.form-group textarea,.form-group select{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:11px 14px;color:var(--text-primary);font-family:var(--font);font-size:.875rem;width:100%;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-group select option{background:#111836}
+/* BUTTON */
+.btn-primary{padding:12px 24px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:10px;font-family:var(--font);font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:8px;margin-top:4px}
+.btn-primary:hover{opacity:.85}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+/* SUBJECTS */
+.section-label{font-size:.7rem;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.subject-grid{display:grid;gap:10px}
+.subject-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px 20px}
+.subject-card .s-name{font-weight:600;font-size:.95rem}
+.subject-card .s-code{font-size:.78rem;color:var(--accent);font-weight:600;margin-top:3px}
+.subject-card .s-desc{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+.subject-card .s-meta{font-size:.74rem;color:var(--text-muted);margin-top:6px}
+/* STUDENTS */
+.student-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;margin-bottom:8px}
+.student-row .s-name{font-weight:500;font-size:.875rem}
+.student-row .s-email{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+.student-row .s-date{font-size:.72rem;color:var(--text-muted)}
+/* QUESTIONS */
+.question-block{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px;margin-bottom:12px}
+.q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.q-header strong{font-size:.85rem}
+.btn-remove{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text-muted);border-radius:6px;padding:4px 12px;font-size:.75rem;cursor:pointer;font-family:var(--font);transition:all .2s}
+.btn-remove:hover{color:#de7d7d;border-color:#de7d7d}
+.options-list{display:grid;gap:8px;margin-top:10px}
+.option-row{display:flex;align-items:center;gap:10px}
+.option-row input[type=radio]{width:auto;min-width:auto;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.option-row input[type=text]{flex:1}
+.btn-add-q{width:100%;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);color:var(--text-muted);border-radius:8px;padding:10px;font-size:.85rem;cursor:pointer;transition:all .2s;font-family:var(--font);margin-bottom:14px}
+.btn-add-q:hover{color:var(--text-primary);border-color:var(--accent)}
+/* MISC */
+.empty{color:var(--text-muted);font-size:.875rem;text-align:center;padding:24px 0}
+.toast{position:fixed;bottom:28px;right:28px;z-index:9999;padding:14px 20px;border-radius:10px;font-size:.875rem;font-weight:500;display:none;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.toast.ok{background:#162616;border:1px solid #2d5a2d;color:#7dde7d;display:block}
+.toast.err{background:#261616;border:1px solid #5a2d2d;color:#de7d7d;display:block}
 </style>
 </head>
 <body>
 
-<!-- ───────── SIDEBAR ───────── -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <div class="brand-logo">EBM</div>
-    <div class="brand-text"><span class="brand-name">EBM</span> <span class="brand-lms">LMS</span></div>
+    <div class="brand-text"><span>EBM</span><span class="brand-lms"> LMS</span></div>
   </div>
-
   <nav class="sidebar-nav">
     <p class="nav-section">MAIN</p>
-    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
-    <a href="subject.html"   class="nav-item"><span class="nav-icon">📚</span> Subjects</a>
-    <a href="teacher.html"   class="nav-item active"><span class="nav-icon">🎓</span> Teacher Panel</a>
-
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span>Dashboard</a>
+    <a href="subject.html"   class="nav-item"><span class="nav-icon">📚</span>Subjects</a>
+    <a href="teacher.html"   class="nav-item active"><span class="nav-icon">🎓</span>Teacher Panel</a>
     <p class="nav-section">SCHOOL</p>
-    <a href="#" class="nav-item"><span class="nav-icon">📣</span> Announcements</a>
-
+    <a href="#" class="nav-item"><span class="nav-icon">📣</span>Announcements</a>
     <p class="nav-section">ACCOUNT</p>
-    <a href="#" class="nav-item"><span class="nav-icon">👤</span> Profile</a>
-    <a href="#" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    <a href="#" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+    <a href="#" class="nav-item"><span class="nav-icon">⚙️</span>Settings</a>
   </nav>
-
   <div class="sidebar-footer">
-    <div class="user-avatar" id="sidebarAvatar">KG</div>
+    <div class="user-avatar" id="sbAvatar">?</div>
     <div class="user-info">
-      <div class="user-name"  id="sidebarName">Loading...</div>
-      <div class="user-role"  id="sidebarRole">Teacher</div>
+      <div class="user-name" id="sbName">Loading…</div>
+      <div class="user-role" id="sbRole">Teacher</div>
     </div>
-    <button class="logout-btn" onclick="logout()" title="Logout">⏻</button>
+    <button class="logout-btn" onclick="logout()">⏻</button>
   </div>
 </aside>
 
-<!-- ───────── MAIN ───────── -->
 <main class="main-content">
-  <div class="teacher-main">
-    <div class="panel-header">
-      <h1>Teacher Panel 🎓</h1>
-      <p>Manage your subjects, lessons, quizzes and exams</p>
-    </div>
+  <div class="panel-header">
+    <h1>Teacher Panel 🎓</h1>
+    <p>Manage your subjects, lessons, quizzes and exams</p>
+  </div>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab-btn" onclick="switchTab('lessons')"  id="tab-lessons">📖 Lessons</button>
-      <button class="tab-btn" onclick="switchTab('quizzes')"  id="tab-quizzes">📝 Quizzes</button>
-      <button class="tab-btn" onclick="switchTab('exams')"    id="tab-exams">📋 Exams</button>
-      <button class="tab-btn" onclick="switchTab('enroll')"   id="tab-enroll">👥 Enroll Students</button>
-      <button class="tab-btn active" onclick="switchTab('subjects')" id="tab-subjects">📦 My Subjects</button>
-    </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('subjects')" id="tb-subjects">📦 My Subjects</button>
+    <button class="tab-btn" onclick="switchTab('lessons')"  id="tb-lessons">📖 Lessons</button>
+    <button class="tab-btn" onclick="switchTab('quizzes')"  id="tb-quizzes">📝 Quizzes</button>
+    <button class="tab-btn" onclick="switchTab('exams')"    id="tb-exams">📋 Exams</button>
+    <button class="tab-btn" onclick="switchTab('enroll')"   id="tb-enroll">👥 Enroll Students</button>
+  </div>
 
-    <!-- ── MY SUBJECTS TAB ── -->
-    <div class="tab-pane active" id="pane-subjects">
-      <div class="card">
-        <h3>📦 Create New Subject</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Subject Name *</label>
-            <input type="text" id="sub-name" placeholder="e.g. Aral-Pan" />
-          </div>
-          <div class="form-group">
-            <label>Subject Code *</label>
-            <input type="text" id="sub-code" placeholder="e.g. ARALO1" />
-          </div>
+  <!-- MY SUBJECTS -->
+  <div class="tab-pane active" id="pane-subjects">
+    <div class="card">
+      <h3>📦 Create New Subject</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Subject Name *</label>
+          <input type="text" id="sub-name" placeholder="e.g. Aral-Pan">
         </div>
-        <div class="form-grid full" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="sub-desc" placeholder="Describe this subject..."></textarea>
-          </div>
+        <div class="form-group">
+          <label>Subject Code *</label>
+          <input type="text" id="sub-code" placeholder="e.g. ARALO1">
         </div>
-        <button class="btn-primary" onclick="createSubject()">Create Subject →</button>
       </div>
-
-      <h3 style="color:var(--text-muted);font-size:.8rem;letter-spacing:.08em;margin-bottom:12px;">YOUR SUBJECTS</h3>
-      <div id="subjects-list"><p class="empty-msg">Loading subjects...</p></div>
-    </div>
-
-    <!-- ── LESSONS TAB ── -->
-    <div class="tab-pane" id="pane-lessons">
-      <div class="card">
-        <h3>📖 Upload New Lesson</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Subject *</label>
-            <select id="les-subject"><option value="">— Select Subject —</option></select>
-          </div>
-          <div class="form-group">
-            <label>Lesson Title *</label>
-            <input type="text" id="les-title" placeholder="e.g. Introduction to Araling Panlipunan" />
-          </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="sub-desc" placeholder="Describe this subject…"></textarea>
         </div>
-        <div class="form-grid" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Video URL (optional)</label>
-            <input type="url" id="les-video" placeholder="https://youtube.com/..." />
-          </div>
-          <div class="form-group">
-            <label>Duration (minutes)</label>
-            <input type="number" id="les-dur" placeholder="30" min="1" />
-          </div>
-        </div>
-        <div class="form-grid full" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Lesson Content *</label>
-            <textarea id="les-content" placeholder="Write the lesson content here..." style="min-height:140px;"></textarea>
-          </div>
-        </div>
-        <button class="btn-primary" onclick="createLesson()">Upload Lesson →</button>
       </div>
+      <button class="btn-primary" id="btn-csub" onclick="createSubject()">Create Subject →</button>
     </div>
+    <p class="section-label">YOUR SUBJECTS</p>
+    <div class="subject-grid" id="subject-list"><p class="empty">Loading subjects…</p></div>
+  </div>
 
-    <!-- ── QUIZZES TAB ── -->
-    <div class="tab-pane" id="pane-quizzes">
-      <div class="card">
-        <h3>📝 Create New Quiz</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Subject *</label>
-            <select id="quiz-subject"><option value="">— Select Subject —</option></select>
-          </div>
-          <div class="form-group">
-            <label>Quiz Title *</label>
-            <input type="text" id="quiz-title" placeholder="e.g. Chapter 1 Quiz" />
-          </div>
-        </div>
-        <div class="form-grid" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Time Limit (minutes)</label>
-            <input type="number" id="quiz-time" value="30" min="5" />
-          </div>
-          <div class="form-group">
-            <label>Passing Score (%)</label>
-            <input type="number" id="quiz-pass" value="75" min="1" max="100" />
-          </div>
-        </div>
-        <div class="form-grid full" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Instructions</label>
-            <textarea id="quiz-instr" placeholder="Instructions for students..."></textarea>
-          </div>
-        </div>
-        <h4 style="color:var(--text-primary);margin:16px 0 10px;font-size:.9rem;">Questions</h4>
-        <div id="quiz-questions"></div>
-        <button class="add-question-btn" onclick="addQuestion('quiz')">+ Add Question</button>
-        <button class="btn-primary" onclick="createQuiz()">Create Quiz →</button>
+  <!-- LESSONS -->
+  <div class="tab-pane" id="pane-lessons">
+    <div class="card">
+      <h3>📖 Upload New Lesson</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Subject *</label><select id="les-sub"><option value="">— Select Subject —</option></select></div>
+        <div class="form-group"><label>Lesson Title *</label><input type="text" id="les-title" placeholder="e.g. Introduction"></div>
       </div>
+      <div class="form-row">
+        <div class="form-group"><label>Video URL (optional)</label><input type="url" id="les-video" placeholder="https://youtube.com/…"></div>
+        <div class="form-group"><label>Duration (minutes)</label><input type="number" id="les-dur" placeholder="30" min="1"></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group"><label>Lesson Content *</label><textarea id="les-content" placeholder="Write lesson content here…" style="min-height:140px"></textarea></div>
+      </div>
+      <button class="btn-primary" id="btn-cles" onclick="createLesson()">Upload Lesson →</button>
     </div>
+  </div>
 
-    <!-- ── EXAMS TAB ── -->
-    <div class="tab-pane" id="pane-exams">
-      <div class="card">
-        <h3>📋 Create New Exam</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Subject *</label>
-            <select id="exam-subject"><option value="">— Select Subject —</option></select>
-          </div>
-          <div class="form-group">
-            <label>Exam Title *</label>
-            <input type="text" id="exam-title" placeholder="e.g. Midterm Examination" />
-          </div>
-        </div>
-        <div class="form-grid" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Exam Type</label>
-            <select id="exam-type">
-              <option value="midterm">Midterm</option>
-              <option value="final">Final</option>
-              <option value="quarterly">Quarterly</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Exam Date</label>
-            <input type="date" id="exam-date" />
-          </div>
-        </div>
-        <div class="form-grid" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Time Limit (minutes)</label>
-            <input type="number" id="exam-time" value="60" min="10" />
-          </div>
-          <div class="form-group">
-            <label>Passing Score (%)</label>
-            <input type="number" id="exam-pass" value="75" min="1" max="100" />
-          </div>
-        </div>
-        <div class="form-grid full" style="margin-top:12px;">
-          <div class="form-group">
-            <label>Instructions</label>
-            <textarea id="exam-instr" placeholder="Instructions for students..."></textarea>
-          </div>
-        </div>
-        <h4 style="color:var(--text-primary);margin:16px 0 10px;font-size:.9rem;">Questions</h4>
-        <div id="exam-questions"></div>
-        <button class="add-question-btn" onclick="addQuestion('exam')">+ Add Question</button>
-        <button class="btn-primary" onclick="createExam()">Create Exam →</button>
+  <!-- QUIZZES -->
+  <div class="tab-pane" id="pane-quizzes">
+    <div class="card">
+      <h3>📝 Create New Quiz</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Subject *</label><select id="quiz-sub"><option value="">— Select Subject —</option></select></div>
+        <div class="form-group"><label>Quiz Title *</label><input type="text" id="quiz-title" placeholder="e.g. Chapter 1 Quiz"></div>
       </div>
+      <div class="form-row">
+        <div class="form-group"><label>Time Limit (minutes)</label><input type="number" id="quiz-time" value="30" min="5"></div>
+        <div class="form-group"><label>Passing Score (%)</label><input type="number" id="quiz-pass" value="75" min="1" max="100"></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group"><label>Instructions</label><textarea id="quiz-instr" placeholder="Instructions for students…"></textarea></div>
+      </div>
+      <p style="font-size:.85rem;font-weight:600;margin-bottom:10px">Questions</p>
+      <div id="quiz-qs"></div>
+      <button class="btn-add-q" onclick="addQ('quiz')">+ Add Question</button>
+      <button class="btn-primary" id="btn-cquiz" onclick="createQuiz()">Create Quiz →</button>
     </div>
+  </div>
 
-    <!-- ── ENROLL STUDENTS TAB ── -->
-    <div class="tab-pane" id="pane-enroll">
-      <div class="card">
-        <h3>👥 Enroll a Student</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Subject *</label>
-            <select id="enr-subject"><option value="">— Select Subject —</option></select>
-          </div>
-          <div class="form-group">
-            <label>Student Email *</label>
-            <input type="email" id="enr-email" placeholder="student@email.com" />
-          </div>
-        </div>
-        <button class="btn-primary" onclick="enrollStudent()">Enroll Student →</button>
+  <!-- EXAMS -->
+  <div class="tab-pane" id="pane-exams">
+    <div class="card">
+      <h3>📋 Create New Exam</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Subject *</label><select id="exam-sub"><option value="">— Select Subject —</option></select></div>
+        <div class="form-group"><label>Exam Title *</label><input type="text" id="exam-title" placeholder="e.g. Midterm Examination"></div>
       </div>
-
-      <div class="card" style="margin-top:0;">
-        <h3>📋 View Enrolled Students</h3>
-        <div class="form-grid" style="margin-bottom:16px;">
-          <div class="form-group">
-            <label>Select Subject</label>
-            <select id="view-subject" onchange="loadStudents()"><option value="">— Select Subject —</option></select>
-          </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Exam Type</label>
+          <select id="exam-type"><option value="midterm">Midterm</option><option value="final">Final</option><option value="quarterly">Quarterly</option></select>
         </div>
-        <div id="students-list"><p class="empty-msg">Select a subject to see enrolled students.</p></div>
+        <div class="form-group"><label>Exam Date</label><input type="date" id="exam-date"></div>
       </div>
+      <div class="form-row">
+        <div class="form-group"><label>Time Limit (minutes)</label><input type="number" id="exam-time" value="60" min="10"></div>
+        <div class="form-group"><label>Passing Score (%)</label><input type="number" id="exam-pass" value="75" min="1" max="100"></div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group"><label>Instructions</label><textarea id="exam-instr" placeholder="Instructions for students…"></textarea></div>
+      </div>
+      <p style="font-size:.85rem;font-weight:600;margin-bottom:10px">Questions</p>
+      <div id="exam-qs"></div>
+      <button class="btn-add-q" onclick="addQ('exam')">+ Add Question</button>
+      <button class="btn-primary" id="btn-cexam" onclick="createExam()">Create Exam →</button>
     </div>
+  </div>
 
-  </div><!-- /teacher-main -->
+  <!-- ENROLL -->
+  <div class="tab-pane" id="pane-enroll">
+    <div class="card">
+      <h3>👥 Enroll a Student</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Subject *</label><select id="enr-sub"><option value="">— Select Subject —</option></select></div>
+        <div class="form-group"><label>Student Email *</label><input type="email" id="enr-email" placeholder="student@email.com"></div>
+      </div>
+      <button class="btn-primary" id="btn-enroll" onclick="enrollStudent()">Enroll Student →</button>
+    </div>
+    <div class="card">
+      <h3>📋 Enrolled Students</h3>
+      <div class="form-row single" style="margin-bottom:16px">
+        <div class="form-group"><label>Select Subject to View</label><select id="view-sub" onchange="loadStudents()"><option value="">— Select Subject —</option></select></div>
+      </div>
+      <div id="student-list"><p class="empty">Select a subject above.</p></div>
+    </div>
+  </div>
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const API = 'https://ebm-lms-production.up.railway.app/api/teacher.php';
+// ── Relative API path (works on any domain) ───────────────
+const API = '/api/teacher.php';
 
-// ── Auth check ──
+// ── Auth ──────────────────────────────────────────────────
 const user = JSON.parse(localStorage.getItem('ebm_user') || 'null');
 if (!user || (user.role !== 'teacher' && user.role !== 'admin')) {
   window.location.href = 'login.html';
 }
 
-// ── Sidebar ──
-document.getElementById('sidebarName').textContent = user.name || (user.first_name + ' ' + user.last_name);
-document.getElementById('sidebarRole').textContent  = user.role.charAt(0).toUpperCase() + user.role.slice(1);
-const initials = ((user.first_name || user.name || '?')[0] + (user.last_name || '')[0]).toUpperCase();
-document.getElementById('sidebarAvatar').textContent = initials;
+// Sidebar
+const fullName = user.name || ((user.first_name || '') + ' ' + (user.last_name || '')).trim() || 'Teacher';
+document.getElementById('sbName').textContent = fullName;
+document.getElementById('sbRole').textContent = (user.role||'teacher').charAt(0).toUpperCase() + (user.role||'teacher').slice(1);
+const av = ((user.first_name || fullName || 'T')[0] + (user.last_name || ' ')[0]).toUpperCase();
+document.getElementById('sbAvatar').textContent = av;
 
-function logout() {
-  localStorage.removeItem('ebm_user');
-  window.location.href = 'login.html';
+function logout() { localStorage.removeItem('ebm_user'); window.location.href = 'login.html'; }
+
+// ── Toast ─────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, isErr = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + (isErr ? 'err' : 'ok');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 3500);
 }
 
-// ── Toast ──
-function toast(msg, isError = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (isError ? ' error' : '');
-  setTimeout(() => t.className = 'toast', 3500);
-}
-
-// ── Tab switching ──
+// ── Tabs ──────────────────────────────────────────────────
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tb-' + name).classList.add('active');
   document.getElementById('pane-' + name).classList.add('active');
 }
 
-// ── API call helper ──
-async function api(data) {
+// ── API call ──────────────────────────────────────────────
+async function call(data) {
   data.teacher_id = user.id;
-  const body = new FormData();
-  Object.entries(data).forEach(([k, v]) => body.append(k, v));
-  const res  = await fetch(API, { method: 'POST', body });
-  const json = await res.json();
-  return json;
+  const fd = new FormData();
+  for (const [k, v] of Object.entries(data)) fd.append(k, v);
+  try {
+    const res  = await fetch(API, { method: 'POST', body: fd });
+    const text = await res.text();
+    try { return JSON.parse(text); }
+    catch(e) { return { status: 'error', message: 'Server returned non-JSON: ' + text.substring(0, 200) }; }
+  } catch(e) {
+    return { status: 'error', message: 'Network error: ' + e.message };
+  }
 }
 
-// ══════════════════════════════════════════
-// MY SUBJECTS
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// SUBJECTS
+// ══════════════════════════════════════════════════════════
+let mySubjects = [];
+
 async function loadSubjects() {
-  const r = await api({ action: 'get_my_subjects' });
-  if (r.status !== 'success') { toast(r.message, true); return []; }
-  const list = r.data || [];
-  renderSubjectsList(list);
-  populateSubjectDropdowns(list);
-  return list;
+  const r = await call({ action: 'get_my_subjects' });
+  if (r.status !== 'success') {
+    document.getElementById('subject-list').innerHTML =
+      `<p class="empty" style="color:#de7d7d">Error loading subjects: ${r.message}</p>`;
+    return;
+  }
+  mySubjects = r.data || [];
+  renderSubjects();
+  fillDropdowns();
 }
 
-function renderSubjectsList(list) {
-  const el = document.getElementById('subjects-list');
-  if (!list.length) { el.innerHTML = '<p class="empty-msg">No subjects yet. Create one above!</p>'; return; }
-  el.innerHTML = list.map(s => `
+function renderSubjects() {
+  const el = document.getElementById('subject-list');
+  if (!mySubjects.length) {
+    el.innerHTML = '<p class="empty">No subjects yet. Create one above!</p>';
+    return;
+  }
+  el.innerHTML = mySubjects.map(s => `
     <div class="subject-card">
-      <div>
-        <div class="sname">${s.subject_name}</div>
-        <div class="scode">${s.subject_code}</div>
-        ${s.description ? `<div class="sdesc">${s.description}</div>` : ''}
-        <div class="smeta">${s.student_count} student(s) · ${s.lesson_count} lesson(s)</div>
-      </div>
-    </div>
-  `).join('');
+      <div class="s-name">${s.subject_name}</div>
+      <div class="s-code">${s.subject_code}</div>
+      ${s.description ? `<div class="s-desc">${s.description}</div>` : ''}
+      <div class="s-meta">${s.student_count} student(s) &nbsp;·&nbsp; ${s.lesson_count} lesson(s)</div>
+    </div>`).join('');
 }
 
-function populateSubjectDropdowns(list) {
-  const selects = ['les-subject','quiz-subject','exam-subject','enr-subject','view-subject'];
-  selects.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const cur = el.value;
-    el.innerHTML = '<option value="">— Select Subject —</option>';
-    list.forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s.id;
-      opt.textContent = `${s.subject_name} (${s.subject_code})`;
-      el.appendChild(opt);
+function fillDropdowns() {
+  ['les-sub','quiz-sub','exam-sub','enr-sub','view-sub'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— Select Subject —</option>';
+    mySubjects.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.id;
+      o.textContent = s.subject_name + ' (' + s.subject_code + ')';
+      sel.appendChild(o);
     });
-    if (cur) el.value = cur;
+    if (cur) sel.value = cur;
   });
 }
 
@@ -450,18 +357,13 @@ async function createSubject() {
   const name = document.getElementById('sub-name').value.trim();
   const code = document.getElementById('sub-code').value.trim();
   const desc = document.getElementById('sub-desc').value.trim();
-
   if (!name) { toast('Subject name is required.', true); return; }
   if (!code) { toast('Subject code is required.', true); return; }
 
-  const btn = document.querySelector('#pane-subjects .btn-primary');
-  btn.disabled = true;
-  btn.textContent = 'Creating...';
-
-  const r = await api({ action: 'create_subject', subject_name: name, subject_code: code, description: desc });
-
-  btn.disabled = false;
-  btn.textContent = 'Create Subject →';
+  const btn = document.getElementById('btn-csub');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  const r = await call({ action: 'create_subject', subject_name: name, subject_code: code, description: desc });
+  btn.disabled = false; btn.textContent = 'Create Subject →';
 
   if (r.status === 'success') {
     toast('Subject created successfully! 🎉');
@@ -474,25 +376,22 @@ async function createSubject() {
   }
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // LESSONS
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 async function createLesson() {
-  const subject_id = document.getElementById('les-subject').value;
+  const subject_id = document.getElementById('les-sub').value;
   const title      = document.getElementById('les-title').value.trim();
   const content    = document.getElementById('les-content').value.trim();
   const video_url  = document.getElementById('les-video').value.trim();
-  const duration   = document.getElementById('les-dur').value;
-
+  const duration   = document.getElementById('les-dur').value || 0;
   if (!subject_id) { toast('Please select a subject.', true); return; }
   if (!title)      { toast('Lesson title is required.', true); return; }
   if (!content)    { toast('Lesson content is required.', true); return; }
 
-  const btn = document.querySelector('#pane-lessons .btn-primary');
-  btn.disabled = true; btn.textContent = 'Uploading...';
-
-  const r = await api({ action: 'create_lesson', subject_id, title, content, video_url, duration: duration || 0 });
-
+  const btn = document.getElementById('btn-cles');
+  btn.disabled = true; btn.textContent = 'Uploading…';
+  const r = await call({ action: 'create_lesson', subject_id, title, content, video_url, duration });
   btn.disabled = false; btn.textContent = 'Upload Lesson →';
 
   if (r.status === 'success') {
@@ -501,193 +400,159 @@ async function createLesson() {
     document.getElementById('les-content').value = '';
     document.getElementById('les-video').value   = '';
     document.getElementById('les-dur').value     = '';
-  } else {
-    toast(r.message || 'Failed to upload lesson.', true);
-  }
+  } else { toast(r.message || 'Failed.', true); }
 }
 
-// ══════════════════════════════════════════
-// QUESTIONS BUILDER
-// ══════════════════════════════════════════
-let questionCounters = { quiz: 0, exam: 0 };
+// ══════════════════════════════════════════════════════════
+// QUESTION BUILDER
+// ══════════════════════════════════════════════════════════
+const qCount = { quiz: 0, exam: 0 };
 
-function addQuestion(type) {
-  const container = document.getElementById(type + '-questions');
-  const n = ++questionCounters[type];
+function addQ(type) {
+  const n = ++qCount[type];
   const div = document.createElement('div');
   div.className = 'question-block';
-  div.id = `${type}-q-${n}`;
-  div.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-      <strong style="font-size:.85rem;color:var(--text-primary);">Question ${n}</strong>
-      <button class="remove-q" onclick="removeQuestion('${type}', ${n})">Remove</button>
-    </div>
-    <div class="form-group">
-      <label>Question Text</label>
-      <input type="text" id="${type}-q${n}-text" placeholder="Enter the question..." />
-    </div>
-    <div style="margin-top:10px;">
-      <label style="font-size:.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">
-        Options (select correct answer)
-      </label>
-      <div id="${type}-q${n}-opts" style="margin-top:8px;display:grid;gap:8px;">
-        ${[1,2,3,4].map(i => `
-          <div class="option-row">
-            <input type="radio" name="${type}-q${n}-correct" value="${i}" />
-            <input type="text" id="${type}-q${n}-opt${i}" placeholder="Option ${i}" />
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-  container.appendChild(div);
+  div.id = type + '-qb-' + n;
+  div.innerHTML =
+    '<div class="q-header"><strong>Question ' + n + '</strong>' +
+    '<button class="btn-remove" onclick="removeQ(\'' + type + '\',' + n + ')">Remove</button></div>' +
+    '<div class="form-group" style="margin-bottom:10px">' +
+    '<label>Question Text</label>' +
+    '<input type="text" id="' + type + '-qt-' + n + '" placeholder="Enter question…"></div>' +
+    '<div class="form-group"><label>Options (select correct answer)</label>' +
+    '<div class="options-list">' +
+    [1,2,3,4].map(i =>
+      '<div class="option-row">' +
+      '<input type="radio" name="' + type + '-qr-' + n + '" value="' + i + '">' +
+      '<input type="text" id="' + type + '-qo-' + n + '-' + i + '" placeholder="Option ' + i + '">' +
+      '</div>'
+    ).join('') +
+    '</div></div>';
+  document.getElementById(type + '-qs').appendChild(div);
 }
 
-function removeQuestion(type, n) {
-  const el = document.getElementById(`${type}-q-${n}`);
+function removeQ(type, n) {
+  const el = document.getElementById(type + '-qb-' + n);
   if (el) el.remove();
 }
 
-function collectQuestions(type) {
-  const questions = [];
-  document.querySelectorAll(`#${type}-questions .question-block`).forEach(block => {
-    const id = block.id.replace(`${type}-q-`, '');
-    const text = document.getElementById(`${type}-q${id}-text`)?.value.trim();
-    if (!text) return;
-    const checkedRadio = block.querySelector(`input[name="${type}-q${id}-correct"]:checked`);
-    const correct = checkedRadio ? parseInt(checkedRadio.value) : 1;
-    const options = [1,2,3,4].map(i => document.getElementById(`${type}-q${id}-opt${i}`)?.value.trim() || '').filter(Boolean);
-    questions.push({ question: text, options, correct });
-  });
-  return questions;
+function collectQs(type) {
+  const blocks = document.querySelectorAll('#' + type + '-qs .question-block');
+  return [...blocks].map(block => {
+    const n   = block.id.split('-').pop();
+    const txt = (document.getElementById(type + '-qt-' + n) || {}).value || '';
+    if (!txt.trim()) return null;
+    const checked = block.querySelector('input[name="' + type + '-qr-' + n + '"]:checked');
+    const correct = checked ? parseInt(checked.value) : 1;
+    const options = [1,2,3,4].map(i => {
+      const el = document.getElementById(type + '-qo-' + n + '-' + i);
+      return el ? el.value.trim() : '';
+    }).filter(Boolean);
+    return { question: txt.trim(), options, correct };
+  }).filter(Boolean);
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // QUIZ
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 async function createQuiz() {
-  const subject_id    = document.getElementById('quiz-subject').value;
+  const subject_id    = document.getElementById('quiz-sub').value;
   const title         = document.getElementById('quiz-title').value.trim();
   const time_limit    = document.getElementById('quiz-time').value;
   const passing_score = document.getElementById('quiz-pass').value;
   const instructions  = document.getElementById('quiz-instr').value.trim();
-
   if (!subject_id) { toast('Please select a subject.', true); return; }
   if (!title)      { toast('Quiz title is required.', true); return; }
-
-  const questions = collectQuestions('quiz');
+  const questions = collectQs('quiz');
   if (!questions.length) { toast('Add at least one question.', true); return; }
 
-  const btn = document.querySelector('#pane-quizzes .btn-primary');
-  btn.disabled = true; btn.textContent = 'Creating...';
-
-  const r = await api({
-    action: 'create_quiz', subject_id, title, instructions,
-    time_limit, passing_score, questions: JSON.stringify(questions)
-  });
-
+  const btn = document.getElementById('btn-cquiz');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  const r = await call({ action: 'create_quiz', subject_id, title, instructions, time_limit, passing_score, questions: JSON.stringify(questions) });
   btn.disabled = false; btn.textContent = 'Create Quiz →';
 
   if (r.status === 'success') {
     toast('Quiz created! 📝');
-    document.getElementById('quiz-title').value  = '';
-    document.getElementById('quiz-instr').value  = '';
-    document.getElementById('quiz-questions').innerHTML = '';
-    questionCounters.quiz = 0;
-  } else {
-    toast(r.message || 'Failed.', true);
-  }
+    document.getElementById('quiz-title').value = '';
+    document.getElementById('quiz-instr').value = '';
+    document.getElementById('quiz-qs').innerHTML = '';
+    qCount.quiz = 0;
+  } else { toast(r.message || 'Failed.', true); }
 }
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // EXAM
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 async function createExam() {
-  const subject_id    = document.getElementById('exam-subject').value;
+  const subject_id    = document.getElementById('exam-sub').value;
   const title         = document.getElementById('exam-title').value.trim();
   const exam_type     = document.getElementById('exam-type').value;
   const exam_date     = document.getElementById('exam-date').value;
   const time_limit    = document.getElementById('exam-time').value;
   const passing_score = document.getElementById('exam-pass').value;
   const instructions  = document.getElementById('exam-instr').value.trim();
-
   if (!subject_id) { toast('Please select a subject.', true); return; }
   if (!title)      { toast('Exam title is required.', true); return; }
-
-  const questions = collectQuestions('exam');
+  const questions = collectQs('exam');
   if (!questions.length) { toast('Add at least one question.', true); return; }
 
-  const btn = document.querySelector('#pane-exams .btn-primary');
-  btn.disabled = true; btn.textContent = 'Creating...';
-
-  const r = await api({
-    action: 'create_exam', subject_id, title, instructions,
-    exam_type, exam_date, time_limit, passing_score,
-    questions: JSON.stringify(questions)
-  });
-
+  const btn = document.getElementById('btn-cexam');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  const r = await call({ action: 'create_exam', subject_id, title, instructions, exam_type, exam_date, time_limit, passing_score, questions: JSON.stringify(questions) });
   btn.disabled = false; btn.textContent = 'Create Exam →';
 
   if (r.status === 'success') {
     toast('Exam created! 📋');
-    document.getElementById('exam-title').value  = '';
-    document.getElementById('exam-instr').value  = '';
-    document.getElementById('exam-date').value   = '';
-    document.getElementById('exam-questions').innerHTML = '';
-    questionCounters.exam = 0;
-  } else {
-    toast(r.message || 'Failed.', true);
-  }
+    document.getElementById('exam-title').value = '';
+    document.getElementById('exam-instr').value = '';
+    document.getElementById('exam-date').value  = '';
+    document.getElementById('exam-qs').innerHTML = '';
+    qCount.exam = 0;
+  } else { toast(r.message || 'Failed.', true); }
 }
 
-// ══════════════════════════════════════════
-// ENROLL STUDENT
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// ENROLL
+// ══════════════════════════════════════════════════════════
 async function enrollStudent() {
-  const subject_id    = document.getElementById('enr-subject').value;
+  const subject_id    = document.getElementById('enr-sub').value;
   const student_email = document.getElementById('enr-email').value.trim();
-
   if (!subject_id)    { toast('Please select a subject.', true); return; }
   if (!student_email) { toast('Student email is required.', true); return; }
 
-  const btn = document.querySelector('#pane-enroll .card .btn-primary');
-  btn.disabled = true; btn.textContent = 'Enrolling...';
-
-  const r = await api({ action: 'enroll_student', subject_id, student_email });
-
+  const btn = document.getElementById('btn-enroll');
+  btn.disabled = true; btn.textContent = 'Enrolling…';
+  const r = await call({ action: 'enroll_student', subject_id, student_email });
   btn.disabled = false; btn.textContent = 'Enroll Student →';
 
   if (r.status === 'success') {
     toast(r.message + ' 👥');
     document.getElementById('enr-email').value = '';
-    document.getElementById('view-subject').value = subject_id;
+    document.getElementById('view-sub').value  = subject_id;
     loadStudents();
-  } else {
-    toast(r.message || 'Failed to enroll.', true);
-  }
+  } else { toast(r.message || 'Failed.', true); }
 }
 
 async function loadStudents() {
-  const subject_id = document.getElementById('view-subject').value;
-  if (!subject_id) return;
-  const r = await api({ action: 'get_enrolled_students', subject_id });
-  const el = document.getElementById('students-list');
-  if (r.status !== 'success' || !r.data.length) {
-    el.innerHTML = '<p class="empty-msg">No students enrolled in this subject yet.</p>';
+  const subject_id = document.getElementById('view-sub').value;
+  const el = document.getElementById('student-list');
+  if (!subject_id) { el.innerHTML = '<p class="empty">Select a subject above.</p>'; return; }
+  el.innerHTML = '<p class="empty">Loading…</p>';
+  const r = await call({ action: 'get_enrolled_students', subject_id });
+  if (r.status !== 'success' || !r.data || !r.data.length) {
+    el.innerHTML = '<p class="empty">No students enrolled in this subject yet.</p>';
     return;
   }
-  el.innerHTML = r.data.map(s => `
-    <div class="student-row">
-      <div class="sinfo">
-        <div class="name">${s.first_name} ${s.last_name}</div>
-        <div class="email">${s.email} · ${s.school_id || 'No ID'}</div>
-      </div>
-      <div style="font-size:.75rem;color:var(--text-muted);">Enrolled ${new Date(s.enrolled_at).toLocaleDateString()}</div>
-    </div>
-  `).join('');
+  el.innerHTML = r.data.map(s =>
+    '<div class="student-row">' +
+    '<div><div class="s-name">' + s.first_name + ' ' + s.last_name + '</div>' +
+    '<div class="s-email">' + s.email + ' &nbsp;·&nbsp; ' + (s.school_id || 'No ID') + '</div></div>' +
+    '<div class="s-date">Enrolled ' + new Date(s.enrolled_at).toLocaleDateString() + '</div>' +
+    '</div>'
+  ).join('');
 }
 
-// ── Init ──
+// ── INIT ──────────────────────────────────────────────────
 loadSubjects();
 </script>
 </body>
