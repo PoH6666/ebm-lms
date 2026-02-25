@@ -5,64 +5,218 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EBM LMS — Subjects</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/module.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
     <style>
-        /* Fix sidebar footer name pushed down */
-        .sidebar-footer {
-            display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            padding: 16px !important;
-            margin-top: auto !important;
+        /* ── Page header ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 14px;
         }
-        .user-info {
-            display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            flex: 1 !important;
-            min-width: 0 !important;
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .user-details {
-            display: flex !important;
-            flex-direction: column !important;
-            min-width: 0 !important;
+        .page-header p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
-        .user-name {
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            font-size: 0.88rem !important;
-            font-weight: 600 !important;
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 9px 14px;
         }
-        .user-role {
-            font-size: 0.75rem !important;
-            color: #888 !important;
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: 0.85rem;
+            width: 200px;
         }
-        .user-avatar {
-            width: 34px !important;
-            height: 34px !important;
-            min-width: 34px !important;
-            border-radius: 50% !important;
-            background: linear-gradient(135deg,#6c63ff,#4ecdc4) !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            color: #fff !important;
+
+        /* ── Filter tabs ── */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
+        .filter-tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font);
+            transition: all 0.2s;
+        }
+        .filter-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .filter-tab:hover:not(.active) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── Subject grid ── */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        /* ── Subject card ── */
+        .subject-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .subject-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(91,127,255,0.4);
+        }
+        .subject-card-banner {
+            height: 7px;
+        }
+        .subject-card-body {
+            padding: 20px;
+        }
+        .subject-card-code {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .subject-card-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .subject-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .subject-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .subject-card-teacher {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .subject-card-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .status-active {
+            background: rgba(91,255,154,0.1);
+            color: #5bff9a;
+        }
+        .status-inactive {
+            background: rgba(255,91,91,0.1);
+            color: #ff7d7d;
+        }
+
+        /* ── Progress (student view) ── */
+        .subject-progress {
+            margin-bottom: 14px;
+        }
+        .subject-progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .subject-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+        .subject-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 14px;
+        }
+        .empty-state h3 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .empty-state p { font-size: 0.85rem; }
+        .empty-state a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Banner colors */
+        .banner-0 { background: linear-gradient(90deg,#5b7fff,#7c5bff); }
+        .banner-1 { background: linear-gradient(90deg,#5bf0ff,#5b7fff); }
+        .banner-2 { background: linear-gradient(90deg,#ffc55b,#ff8c5b); }
+        .banner-3 { background: linear-gradient(90deg,#7c5bff,#ff5bb8); }
+        .banner-4 { background: linear-gradient(90deg,#5bff9a,#5bf0ff); }
+        .banner-5 { background: linear-gradient(90deg,#ff5bb8,#ffc55b); }
     </style>
 </head>
 <body>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon">🎓</div>
-            EBM <span>LMS</span>
+        <div class="sidebar-brand">
+            <div class="brand-logo">EB</div>
+            <div class="brand-text">EBM <span class="brand-lms">LMS</span></div>
         </div>
+
         <nav class="sidebar-nav">
-            <div class="nav-section-label">Main</div>
+            <div class="nav-section">Main</div>
             <a href="dashboard.html" class="nav-item">
                 <span class="nav-icon">🏠</span> Dashboard
             </a>
@@ -75,25 +229,26 @@
             <a href="#" class="nav-item">
                 <span class="nav-icon">📊</span> Grades
             </a>
-            <!-- Teacher-only link (shown via JS) -->
-            <div id="teacherNavItem" style="display:none;">
-                <div class="nav-section-label">Teacher</div>
+
+            <div id="teacherNavSection" style="display:none;">
+                <div class="nav-section">Teacher</div>
                 <a href="teacher.html" class="nav-item">
                     <span class="nav-icon">🧑‍🏫</span> Teacher Panel
                 </a>
             </div>
-            <div class="nav-section-label">School</div>
+
+            <div class="nav-section">School</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">✅</span> Attendance
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">🔔</span> Announcements
-                <span class="badge">0</span>
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📅</span> Schedule
             </a>
-            <div class="nav-section-label">Account</div>
+
+            <div class="nav-section">Account</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">👤</span> Profile
             </a>
@@ -101,235 +256,196 @@
                 <span class="nav-icon">⚙️</span> Settings
             </a>
         </nav>
+
         <div class="sidebar-footer">
+            <div class="user-avatar" id="sidebarAvatar">?</div>
             <div class="user-info">
-                <div class="user-avatar" id="sidebarAvatar">?</div>
-                <div class="user-details">
-                    <div class="user-name" id="sidebarName">Loading...</div>
-                    <div class="user-role" id="sidebarRole">—</div>
-                </div>
+                <div class="user-name" id="sidebarName">Loading...</div>
+                <div class="user-role" id="sidebarRole">—</div>
             </div>
-            <a href="login.html" class="logout-btn" title="Logout" id="logoutBtn">⏻</a>
+            <button class="logout-btn" id="logoutBtn" title="Logout">⏻</button>
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="main-content">
-
-        <!-- TOP BAR -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1>My Subjects 📚</h1>
-                <p>All your enrolled subjects and learning materials</p>
+        <div class="page-header">
+            <div>
+                <h1 id="pageTitle">My Subjects 📚</h1>
+                <p id="pageSubtitle">All your enrolled subjects and learning materials</p>
             </div>
-            <div class="topbar-right">
-                <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Search subjects..." oninput="filterSubjects(this.value)" />
-                </div>
-            </div>
-        </header>
-
-        <!-- FILTER TABS -->
-        <div class="filter-bar">
-            <button class="filter-btn active" onclick="setFilter('all', this)">All Subjects</button>
-            <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
-            <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
-            <button class="filter-btn" onclick="setFilter('not-started', this)">Not Started</button>
-        </div>
-
-        <!-- SUBJECT GRID -->
-        <div class="modules-grid" id="modules-grid">
-            <div id="loading-state" style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
-                <div style="font-size:2rem; margin-bottom:12px;">⏳</div>
-                <div>Loading your subjects...</div>
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="Search subjects...">
             </div>
         </div>
 
-        <!-- SUBJECT DETAIL PANEL (slide-in) -->
-        <div class="module-panel" id="module-panel">
-            <div class="panel-overlay" onclick="closeSubject()"></div>
-            <div class="panel-content">
-                <div class="panel-header">
-                    <div>
-                        <h2 id="panel-title">Subject</h2>
-                        <p id="panel-teacher"></p>
-                    </div>
-                    <button class="panel-close" onclick="closeSubject()">✕</button>
-                </div>
-                <div class="panel-lessons">
-                    <h3>Lessons</h3>
-                    <div class="lesson-list" id="panel-lessons-list">
-                        <div style="text-align:center; padding:30px; color:#888;">No lessons available yet.</div>
-                    </div>
-                </div>
-                <button class="btn-open-lesson">Open Current Lesson →</button>
-            </div>
+        <!-- Filter tabs (student only) -->
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-tab active" data-filter="all">All Subjects</button>
+            <button class="filter-tab" data-filter="ongoing">Ongoing</button>
+            <button class="filter-tab" data-filter="completed">Completed</button>
+            <button class="filter-tab" data-filter="not_started">Not Started</button>
         </div>
 
+        <div class="subjects-grid" id="subjectsGrid">
+            <div class="empty-state">
+                <div class="empty-icon">⏳</div>
+                <h3>Loading subjects...</h3>
+            </div>
+        </div>
     </main>
 
     <script>
-        const API_BASE = 'https://ebm-lms-production.up.railway.app/auth/auth.php';
+        const TEACH_API = '/api/teacher.php';
+        const AUTH_API  = '/auth/auth.php';
 
-        // ── Load user ────────────────────────────────────────────
+        // ── Auth ────────────────────────────────────────
         const user = JSON.parse(localStorage.getItem('ebm_user') || 'null');
+        if (!user || !user.id) { window.location.href = 'login.html'; }
 
-        if (!user || !user.id) {
-            window.location.href = 'login.html';
-        } else {
-            const firstName = user.first_name || (user.name ? user.name.split(' ')[0] : 'User');
-            const lastName  = user.last_name  || (user.name ? user.name.split(' ').slice(1).join(' ') : '');
-            const fullName  = (firstName + ' ' + lastName).trim();
-            const role      = user.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Student';
+        const firstName = user.first_name || (user.name || '').split(' ')[0] || 'User';
+        const lastName  = user.last_name  || (user.name || '').split(' ').slice(1).join(' ') || '';
+        const fullName  = (firstName + ' ' + lastName).trim();
+        const role      = user.role || 'student';
 
-            document.getElementById('sidebarName').textContent   = fullName;
-            document.getElementById('sidebarRole').textContent   = role;
-            const initials = (firstName[0] || '') + (lastName[0] || '');
-            document.getElementById('sidebarAvatar').textContent = initials.toUpperCase();
+        // Sidebar
+        document.getElementById('sidebarName').textContent   = fullName;
+        document.getElementById('sidebarRole').textContent   = role.charAt(0).toUpperCase() + role.slice(1);
+        document.getElementById('sidebarAvatar').textContent = ((firstName[0]||'') + (lastName[0]||'')).toUpperCase() || '?';
 
-            if (user.role === 'teacher' || user.role === 'admin') {
-                document.getElementById('teacherNavItem').style.display = 'block';
-            }
+        if (role === 'teacher' || role === 'admin') {
+            document.getElementById('teacherNavSection').style.display = 'block';
+            // Update page labels for teacher
+            document.getElementById('pageTitle').textContent    = 'My Subjects 🧑‍🏫';
+            document.getElementById('pageSubtitle').textContent = 'Subjects you created and manage';
+            document.getElementById('filterTabs').style.display = 'none';
         }
 
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
+        document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('ebm_user');
             window.location.href = 'login.html';
         });
 
-        // ── Card colors cycle ────────────────────────────────────
-        const colorSchemes = [
-            { header: 'blue-header',   bar: 'blue-bar',   btn: 'blue-btn'   },
-            { header: 'cyan-header',   bar: 'cyan-bar',   btn: 'cyan-btn'   },
-            { header: 'gold-header',   bar: 'gold-bar',   btn: 'gold-btn'   },
-            { header: 'purple-header', bar: 'purple-bar', btn: 'purple-btn' },
-            { header: 'green-header',  bar: 'green-bar',  btn: 'green-btn'  },
-            { header: 'pink-header',   bar: 'pink-bar',   btn: 'pink-btn'   },
-        ];
-
-        const subjectEmojis = ['📐','🔬','📜','💬','🌏','⚽','🎨','🎵','💻','📊'];
-
-        function getStatus(progress) {
-            if (progress >= 100) return { label: 'Completed',   tag: 'completed-tag',  dataStatus: 'completed'   };
-            if (progress > 0)    return { label: 'Ongoing',     tag: 'ongoing-tag',    dataStatus: 'ongoing'     };
-            return                      { label: 'Not Started', tag: 'notstarted-tag', dataStatus: 'not-started' };
+        // ── Helpers ─────────────────────────────────────
+        function esc(s) {
+            return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
 
-        function getBtnLabel(progress) {
-            if (progress >= 100) return 'Review →';
-            if (progress > 0)    return 'Continue →';
-            return 'Start →';
+        async function postAPI(url, body) {
+            const fd = new FormData();
+            Object.entries(body).forEach(([k,v]) => fd.append(k, v));
+            const res = await fetch(url, { method: 'POST', body: fd });
+            return res.json();
         }
 
-        // ── Render subjects ──────────────────────────────────────
+        // ── Render subjects ──────────────────────────────
+        let allSubjects = [];
+
         function renderSubjects(subjects) {
-            const grid = document.getElementById('modules-grid');
-
-            if (!subjects || subjects.length === 0) {
+            const grid = document.getElementById('subjectsGrid');
+            if (!subjects || !subjects.length) {
                 grid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
-                        <div style="font-size:3rem; margin-bottom:16px;">📚</div>
-                        <div style="font-size:1.1rem; margin-bottom:8px;">No subjects enrolled yet.</div>
-                        <div style="font-size:0.9rem;">Your teacher will enroll you in subjects.</div>
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h3>${role === 'teacher' ? 'No subjects yet.' : 'No subjects enrolled yet.'}</h3>
+                        <p>${role === 'teacher'
+                            ? '<a href="teacher.html">Create your first subject →</a>'
+                            : 'Your teacher will enroll you in subjects.'}</p>
                     </div>`;
                 return;
             }
 
-            grid.innerHTML = subjects.map((sub, i) => {
-                const scheme   = colorSchemes[i % colorSchemes.length];
-                const emoji    = subjectEmojis[i % subjectEmojis.length];
-                const status   = getStatus(Number(sub.progress || 0));
-                const btnText  = getBtnLabel(Number(sub.progress || 0));
-                const progress = Number(sub.progress || 0);
-                const teacher  = sub.teacher_name ? `👨‍🏫 ${sub.teacher_name}` : '—';
-                const desc     = sub.description || 'No description available.';
-
-                return `
-                <div class="module-card" data-status="${status.dataStatus}" data-id="${sub.id}"
-                     onclick="openSubject(${sub.id}, '${escHtml(sub.subject_name)}', '${escHtml(sub.teacher_name || '')}')">
-                    <div class="module-card-header ${scheme.header}">
-                        <div class="module-emoji">${emoji}</div>
-                        <span class="module-status-tag ${status.tag}">${status.label}</span>
-                    </div>
-                    <div class="module-card-body">
-                        <div class="module-subject">${escHtml(sub.subject_name)}</div>
-                        <div class="module-teacher">${teacher}</div>
-                        <p class="module-desc">${escHtml(desc)}</p>
-                        <div class="module-progress-section">
-                            <div class="progress-header">
+            grid.innerHTML = subjects.map((s, i) => `
+                <div class="subject-card" onclick="${role === 'teacher' ? "window.location.href='teacher.html'" : "window.location.href='module.html'"}">
+                    <div class="subject-card-banner banner-${i % 6}"></div>
+                    <div class="subject-card-body">
+                        <div class="subject-card-code">${esc(s.subject_code || 'N/A')}</div>
+                        <div class="subject-card-name">${esc(s.subject_name)}</div>
+                        <div class="subject-card-desc">${esc(s.description || 'No description provided.')}</div>
+                        ${role !== 'teacher' ? `
+                        <div class="subject-progress">
+                            <div class="subject-progress-label">
                                 <span>Progress</span>
-                                <span class="progress-percent">${progress}%</span>
+                                <span>${s.progress || 0}%</span>
                             </div>
-                            <div class="progress-track">
-                                <div class="progress-bar ${scheme.bar}" style="width:${progress}%"></div>
+                            <div class="subject-progress-bar">
+                                <div class="subject-progress-fill" style="width:${s.progress || 0}%"></div>
                             </div>
+                        </div>` : ''}
+                        <div class="subject-card-footer">
+                            <span class="subject-card-teacher">
+                                ${role === 'teacher' ? '🧑‍🏫 You' : '👤 ' + esc(s.teacher_name || '—')}
+                            </span>
+                            <span class="subject-card-status ${s.status === 'active' ? 'status-active' : 'status-inactive'}">
+                                ${s.status || 'active'}
+                            </span>
                         </div>
                     </div>
-                    <div class="module-card-footer">
-                        <span class="last-activity">Enrolled: ${formatDate(sub.enrolled_at)}</span>
-                        <button class="btn-continue ${scheme.btn}">${btnText}</button>
-                    </div>
-                </div>`;
-            }).join('');
+                </div>`).join('');
         }
 
-        function escHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return '—';
-            try { return new Date(dateStr).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
-            catch(e) { return dateStr; }
-        }
-
-        // ── Fetch enrolled subjects ──────────────────────────────
+        // ── Load subjects by role ────────────────────────
         async function loadSubjects() {
             try {
-                const res  = await fetch(`${API_BASE}?action=get_enrolled_subjects&user_id=${user.id}`);
-                const data = await res.json();
-                document.getElementById('loading-state')?.remove();
-                renderSubjects(data.status === 'success' ? data.data : []);
+                let subjects = [];
+
+                if (role === 'teacher' || role === 'admin') {
+                    const data = await postAPI(TEACH_API, {
+                        action: 'get_my_subjects',
+                        teacher_id: user.id
+                    });
+                    subjects = data.status === 'success' ? (data.subjects || []) : [];
+                } else {
+                    // Student — get enrolled subjects
+                    const data = await postAPI(AUTH_API, {
+                        action: 'get_enrolled_modules',
+                        user_id: user.id
+                    });
+                    subjects = data.status === 'success' ? (data.data || data.modules || data.subjects || []) : [];
+                }
+
+                allSubjects = subjects;
+                renderSubjects(subjects);
             } catch(e) {
-                document.getElementById('loading-state')?.remove();
-                renderSubjects([]);
+                document.getElementById('subjectsGrid').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <h3>Could not load subjects</h3>
+                        <p>${e.message}</p>
+                    </div>`;
             }
         }
 
+        // ── Filter tabs (student only) ───────────────────
+        document.querySelectorAll('.filter-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const f = btn.dataset.filter;
+                if (f === 'all') {
+                    renderSubjects(allSubjects);
+                } else if (f === 'ongoing') {
+                    renderSubjects(allSubjects.filter(s => (s.progress || 0) > 0 && (s.progress || 0) < 100));
+                } else if (f === 'completed') {
+                    renderSubjects(allSubjects.filter(s => (s.progress || 0) >= 100));
+                } else {
+                    renderSubjects(allSubjects.filter(s => !s.progress || s.progress == 0));
+                }
+            });
+        });
+
+        // ── Search ───────────────────────────────────────
+        document.getElementById('searchInput').addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            renderSubjects(allSubjects.filter(s =>
+                (s.subject_name || '').toLowerCase().includes(q) ||
+                (s.subject_code || '').toLowerCase().includes(q) ||
+                (s.description || '').toLowerCase().includes(q)
+            ));
+        });
+
         loadSubjects();
-
-        // ── Filter & Search ──────────────────────────────────────
-        function setFilter(filter, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.module-card').forEach(card => {
-                card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
-            });
-        }
-
-        function filterSubjects(query) {
-            document.querySelectorAll('.module-card').forEach(card => {
-                const name = card.querySelector('.module-subject')?.textContent.toLowerCase() || '';
-                card.style.display = name.includes(query.toLowerCase()) ? 'flex' : 'none';
-            });
-        }
-
-        // ── Subject panel ─────────────────────────────────────────
-        function openSubject(id, title, teacher) {
-            document.getElementById('panel-title').textContent   = title || 'Subject';
-            document.getElementById('panel-teacher').textContent = teacher || '';
-            document.getElementById('panel-lessons-list').innerHTML =
-                '<div style="text-align:center;padding:30px;color:#888;">No lessons available yet.</div>';
-            document.getElementById('module-panel').classList.add('open');
-        }
-
-        function closeSubject() {
-            document.getElementById('module-panel').classList.remove('open');
-        }
     </script>
 </body>
 </html>
