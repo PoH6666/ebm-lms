@@ -29,6 +29,14 @@
             <a href="#" class="nav-item">
                 <span class="nav-icon">📊</span> Grades
             </a>
+            <!-- Teacher-only link (shown via JS) -->
+            <div id="teacherNavItem" style="display:none;">
+                <div class="nav-section-label">Teacher</div>
+                <a href="teacher.html" class="nav-item">
+                    <span class="nav-icon">🧑‍🏫</span> Teacher Panel
+                </a>
+            </div>
+
             <div class="nav-section-label">School</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">✅</span> Attendance
@@ -134,6 +142,11 @@
             document.getElementById('sidebarRole').textContent   = role;
             const initials = (firstName[0] || '') + (lastName[0] || '');
             document.getElementById('sidebarAvatar').textContent = initials.toUpperCase();
+
+            // Show Teacher Panel link for teachers/admins
+            if (user.role === 'teacher' || user.role === 'admin') {
+                document.getElementById('teacherNavItem').style.display = 'block';
+            }
         }
 
         // Logout
