@@ -34,7 +34,7 @@ body {
 /* --- SIDEBAR --- */
 .sidebar {
     width: var(--sidebar-w);
-    min-height: 100vh;
+    height: 100vh;
     background: rgba(10,15,44,0.95);
     border-right: 1px solid var(--border);
     display: flex;
@@ -43,6 +43,7 @@ body {
     top: 0; left: 0;
     z-index: 50;
     backdrop-filter: blur(20px);
+    overflow: hidden;
 }
 
 .sidebar-logo {
@@ -55,6 +56,7 @@ body {
     padding: 24px 20px;
     border-bottom: 1px solid var(--border);
     color: var(--white);
+    flex-shrink: 0;
 }
 
 .logo-icon {
@@ -74,6 +76,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-height: 0;
 }
 
 .nav-section-label {
@@ -123,12 +126,15 @@ body {
     border-radius: 50px;
 }
 
+/* --- SIDEBAR FOOTER (FIXED) --- */
 .sidebar-footer {
-    padding: 16px;
+    padding: 14px 16px;
     border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
+    min-height: 0;
 }
 
 .user-info {
@@ -136,16 +142,29 @@ body {
     align-items: center;
     gap: 10px;
     flex: 1;
+    min-width: 0;        /* CRITICAL — allows text-overflow to work */
+    overflow: hidden;
 }
 
 .user-avatar {
-    width: 36px; height: 36px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;     /* prevent shrinking */
     background: linear-gradient(135deg, var(--blue), var(--blue-bright));
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.8rem;
     font-weight: 700;
     flex-shrink: 0;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;        /* CRITICAL — allows children to truncate */
+    overflow: hidden;
 }
 
 .user-name {
@@ -153,12 +172,14 @@ body {
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis;  /* shows ... when name is too long */
+    max-width: 100%;
 }
 
 .user-role {
     font-size: 0.75rem;
     color: var(--gray);
+    white-space: nowrap;
 }
 
 .logout-btn {
@@ -171,6 +192,7 @@ body {
     padding: 6px 8px;
     transition: all 0.2s;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .logout-btn:hover {
@@ -395,11 +417,14 @@ body {
 .gold-dot   { background: var(--gold); }
 .purple-dot { background: var(--purple); }
 
-.module-info { flex: 1; }
+.module-info { flex: 1; min-width: 0; }
 
 .module-name {
     font-size: 0.9rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .module-teacher {
@@ -504,9 +529,7 @@ body {
     cursor: pointer;
 }
 
-.announcement-item:hover {
-    border-color: rgba(255,255,255,0.15);
-}
+.announcement-item:hover { border-color: rgba(255,255,255,0.15); }
 
 .ann-icon { font-size: 1.1rem; padding-top: 1px; }
 .ann-title { font-size: 0.87rem; font-weight: 500; }
