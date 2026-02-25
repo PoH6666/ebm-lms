@@ -6,6 +6,52 @@
     <title>EBM LMS — Subjects</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/module.css">
+    <style>
+        /* Fix sidebar footer name pushed down */
+        .sidebar-footer {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            padding: 16px !important;
+            margin-top: auto !important;
+        }
+        .user-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex: 1 !important;
+            min-width: 0 !important;
+        }
+        .user-details {
+            display: flex !important;
+            flex-direction: column !important;
+            min-width: 0 !important;
+        }
+        .user-name {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+        }
+        .user-role {
+            font-size: 0.75rem !important;
+            color: #888 !important;
+        }
+        .user-avatar {
+            width: 34px !important;
+            height: 34px !important;
+            min-width: 34px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg,#6c63ff,#4ecdc4) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            color: #fff !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -36,7 +82,6 @@
                     <span class="nav-icon">🧑‍🏫</span> Teacher Panel
                 </a>
             </div>
-
             <div class="nav-section-label">School</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">✅</span> Attendance
@@ -80,37 +125,37 @@
             <div class="topbar-right">
                 <div class="search-box">
                     <span>🔍</span>
-                    <input type="text" placeholder="Search modules..." oninput="filterModules(this.value)" />
+                    <input type="text" placeholder="Search subjects..." oninput="filterSubjects(this.value)" />
                 </div>
             </div>
         </header>
 
         <!-- FILTER TABS -->
         <div class="filter-bar">
-            <button class="filter-btn active" onclick="setFilter('all', this)">All Modules</button>
+            <button class="filter-btn active" onclick="setFilter('all', this)">All Subjects</button>
             <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
             <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
             <button class="filter-btn" onclick="setFilter('not-started', this)">Not Started</button>
         </div>
 
-        <!-- MODULE GRID -->
+        <!-- SUBJECT GRID -->
         <div class="modules-grid" id="modules-grid">
             <div id="loading-state" style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
                 <div style="font-size:2rem; margin-bottom:12px;">⏳</div>
-                <div>Loading your modules...</div>
+                <div>Loading your subjects...</div>
             </div>
         </div>
 
-        <!-- MODULE DETAIL PANEL (slide-in) -->
+        <!-- SUBJECT DETAIL PANEL (slide-in) -->
         <div class="module-panel" id="module-panel">
-            <div class="panel-overlay" onclick="closeModule()"></div>
+            <div class="panel-overlay" onclick="closeSubject()"></div>
             <div class="panel-content">
                 <div class="panel-header">
                     <div>
-                        <h2 id="panel-title">Module</h2>
+                        <h2 id="panel-title">Subject</h2>
                         <p id="panel-teacher"></p>
                     </div>
-                    <button class="panel-close" onclick="closeModule()">✕</button>
+                    <button class="panel-close" onclick="closeSubject()">✕</button>
                 </div>
                 <div class="panel-lessons">
                     <h3>Lessons</h3>
@@ -143,7 +188,6 @@
             const initials = (firstName[0] || '') + (lastName[0] || '');
             document.getElementById('sidebarAvatar').textContent = initials.toUpperCase();
 
-            // Show Teacher Panel link for teachers/admins
             if (user.role === 'teacher' || user.role === 'admin') {
                 document.getElementById('teacherNavItem').style.display = 'block';
             }
@@ -166,12 +210,12 @@
             { header: 'pink-header',   bar: 'pink-bar',   btn: 'pink-btn'   },
         ];
 
-        const moduleEmojis = ['📐','🔬','📜','💬','🌏','⚽','🎨','🎵','💻','📊'];
+        const subjectEmojis = ['📐','🔬','📜','💬','🌏','⚽','🎨','🎵','💻','📊'];
 
         function getStatus(progress) {
-            if (progress >= 100) return { label: 'Completed',   tag: 'completed-tag',   dataStatus: 'completed'  };
-            if (progress > 0)    return { label: 'Ongoing',     tag: 'ongoing-tag',     dataStatus: 'ongoing'    };
-            return                      { label: 'Not Started', tag: 'notstarted-tag',  dataStatus: 'not-started'};
+            if (progress >= 100) return { label: 'Completed',   tag: 'completed-tag',  dataStatus: 'completed'   };
+            if (progress > 0)    return { label: 'Ongoing',     tag: 'ongoing-tag',    dataStatus: 'ongoing'     };
+            return                      { label: 'Not Started', tag: 'notstarted-tag', dataStatus: 'not-started' };
         }
 
         function getBtnLabel(progress) {
@@ -180,37 +224,38 @@
             return 'Start →';
         }
 
-        // ── Render modules ───────────────────────────────────────
-        function renderModules(modules) {
+        // ── Render subjects ──────────────────────────────────────
+        function renderSubjects(subjects) {
             const grid = document.getElementById('modules-grid');
 
-            if (!modules || modules.length === 0) {
+            if (!subjects || subjects.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
                         <div style="font-size:3rem; margin-bottom:16px;">📚</div>
-                        <div style="font-size:1.1rem; margin-bottom:8px;">No modules enrolled yet.</div>
+                        <div style="font-size:1.1rem; margin-bottom:8px;">No subjects enrolled yet.</div>
                         <div style="font-size:0.9rem;">Your teacher will enroll you in subjects.</div>
                     </div>`;
                 return;
             }
 
-            grid.innerHTML = modules.map((mod, i) => {
-                const scheme  = colorSchemes[i % colorSchemes.length];
-                const emoji   = moduleEmojis[i % moduleEmojis.length];
-                const status  = getStatus(Number(mod.progress || 0));
-                const btnText = getBtnLabel(Number(mod.progress || 0));
-                const progress = Number(mod.progress || 0);
-                const teacher = mod.teacher_name ? `👨‍🏫 ${mod.teacher_name}` : '—';
-                const desc    = mod.description || 'No description available.';
+            grid.innerHTML = subjects.map((sub, i) => {
+                const scheme   = colorSchemes[i % colorSchemes.length];
+                const emoji    = subjectEmojis[i % subjectEmojis.length];
+                const status   = getStatus(Number(sub.progress || 0));
+                const btnText  = getBtnLabel(Number(sub.progress || 0));
+                const progress = Number(sub.progress || 0);
+                const teacher  = sub.teacher_name ? `👨‍🏫 ${sub.teacher_name}` : '—';
+                const desc     = sub.description || 'No description available.';
 
                 return `
-                <div class="module-card" data-status="${status.dataStatus}" data-id="${mod.id}" onclick="openModule(${mod.id}, '${escHtml(mod.subject_name)}', '${escHtml(mod.teacher_name || '')}')">
+                <div class="module-card" data-status="${status.dataStatus}" data-id="${sub.id}"
+                     onclick="openSubject(${sub.id}, '${escHtml(sub.subject_name)}', '${escHtml(sub.teacher_name || '')}')">
                     <div class="module-card-header ${scheme.header}">
                         <div class="module-emoji">${emoji}</div>
                         <span class="module-status-tag ${status.tag}">${status.label}</span>
                     </div>
                     <div class="module-card-body">
-                        <div class="module-subject">${escHtml(mod.subject_name)}</div>
+                        <div class="module-subject">${escHtml(sub.subject_name)}</div>
                         <div class="module-teacher">${teacher}</div>
                         <p class="module-desc">${escHtml(desc)}</p>
                         <div class="module-progress-section">
@@ -224,7 +269,7 @@
                         </div>
                     </div>
                     <div class="module-card-footer">
-                        <span class="last-activity">Enrolled: ${formatDate(mod.enrolled_at)}</span>
+                        <span class="last-activity">Enrolled: ${formatDate(sub.enrolled_at)}</span>
                         <button class="btn-continue ${scheme.btn}">${btnText}</button>
                     </div>
                 </div>`;
@@ -238,29 +283,24 @@
 
         function formatDate(dateStr) {
             if (!dateStr) return '—';
-            try {
-                return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            } catch(e) { return dateStr; }
+            try { return new Date(dateStr).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+            catch(e) { return dateStr; }
         }
 
-        // ── Fetch enrolled modules ───────────────────────────────
-        async function loadModules() {
+        // ── Fetch enrolled subjects ──────────────────────────────
+        async function loadSubjects() {
             try {
                 const res  = await fetch(`${API_BASE}?action=get_enrolled_subjects&user_id=${user.id}`);
                 const data = await res.json();
                 document.getElementById('loading-state')?.remove();
-                if (data.status === 'success') {
-                    renderModules(data.data);
-                } else {
-                    renderModules([]);
-                }
+                renderSubjects(data.status === 'success' ? data.data : []);
             } catch(e) {
                 document.getElementById('loading-state')?.remove();
-                renderModules([]);
+                renderSubjects([]);
             }
         }
 
-        loadModules();
+        loadSubjects();
 
         // ── Filter & Search ──────────────────────────────────────
         function setFilter(filter, btn) {
@@ -271,23 +311,23 @@
             });
         }
 
-        function filterModules(query) {
+        function filterSubjects(query) {
             document.querySelectorAll('.module-card').forEach(card => {
                 const name = card.querySelector('.module-subject')?.textContent.toLowerCase() || '';
                 card.style.display = name.includes(query.toLowerCase()) ? 'flex' : 'none';
             });
         }
 
-        // ── Module panel ─────────────────────────────────────────
-        function openModule(id, title, teacher) {
-            document.getElementById('panel-title').textContent   = title || 'Module';
+        // ── Subject panel ─────────────────────────────────────────
+        function openSubject(id, title, teacher) {
+            document.getElementById('panel-title').textContent   = title || 'Subject';
             document.getElementById('panel-teacher').textContent = teacher || '';
             document.getElementById('panel-lessons-list').innerHTML =
                 '<div style="text-align:center;padding:30px;color:#888;">No lessons available yet.</div>';
             document.getElementById('module-panel').classList.add('open');
         }
 
-        function closeModule() {
+        function closeSubject() {
             document.getElementById('module-panel').classList.remove('open');
         }
     </script>
