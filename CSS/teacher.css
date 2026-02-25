@@ -1,0 +1,241 @@
+/* =========================================
+   EBM LMS — Teacher Panel Styles
+   teacher.css
+   Used by: teacher.html only
+   Requires: dashboard.css (shared styles)
+   ========================================= */
+
+/* ─────────────────────────────────────────
+   PAGE HEADER
+   ───────────────────────────────────────── */
+.panel-header {
+  margin-bottom: 28px;
+}
+
+.panel-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.panel-header p {
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+/* ─────────────────────────────────────────
+   TABS
+   ───────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--card-border);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* ─────────────────────────────────────────
+   SUBJECT CARDS
+   ───────────────────────────────────────── */
+.subject-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.subject-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 16px 20px;
+  transition: border-color 0.2s;
+}
+
+.subject-card:hover {
+  border-color: rgba(91, 127, 255, 0.3);
+}
+
+.subject-card .s-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.subject-card .s-code {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.subject-card .s-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.subject-card .s-meta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ─────────────────────────────────────────
+   ENROLLED STUDENT ROWS
+   ───────────────────────────────────────── */
+.student-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.student-row .s-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.student-row .s-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.student-row .s-date {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────
+   QUESTION BUILDER
+   ───────────────────────────────────────── */
+.question-block {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.q-header strong {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.btn-remove {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.2s;
+}
+
+.btn-remove:hover {
+  color: #de7d7d;
+  border-color: #de7d7d;
+}
+
+.options-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-row input[type="radio"] {
+  width: auto;
+  min-width: auto;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.option-row input[type="text"] {
+  flex: 1;
+}
+
+/* Add Question button */
+.btn-add-q {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font);
+  margin-bottom: 14px;
+}
+
+.btn-add-q:hover {
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+/* Question sub-heading inside card */
+.questions-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
