@@ -1,20 +1,17 @@
 FROM php:8.2-apache
 
-# Enable mysqli
+# Enable mysqli extension
 RUN docker-php-ext-install mysqli
 
-# Copy all project files to web root
+# Copy all files to Apache web root
 COPY . /var/www/html/
 
-# Set working directory
-WORKDIR /var/www/html
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html
 
-# Allow .htaccess overrides
-RUN echo '<Directory /var/www/html>\n\
-    AllowOverride All\n\
-    Require all granted\n\
-</Directory>' > /etc/apache2/conf-enabled/override.conf
-
-RUN a2enmod rewrite
+# Railway uses PORT env variable — configure Apache to use it
+RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
 EXPOSE 80
+
+CMD ["apache2-foreground"]
