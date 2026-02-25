@@ -113,11 +113,6 @@ switch ($action) {
 
         if ($stmt->execute()) {
             $new_id = $conn->insert_id;
-            $_SESSION['user_id']    = $new_id;
-            $_SESSION['user_name']  = "$first_name $last_name";
-            $_SESSION['user_role']  = $role;
-            $_SESSION['user_email'] = $email;
-
             respond('success', 'Account created successfully!', [
                 'id'         => $new_id,
                 'first_name' => $first_name,
@@ -132,51 +127,44 @@ switch ($action) {
         }
         break;
 
-    case 'get_enrolled_modules':
-        $user_id = getParam('user_id');
-
-        if (empty($user_id)) {
-            respond('error', 'user_id is required.');
-        }
+    case 'get_enrolled_subjects':
+        $user_id = (int) getParam('user_id');
+        if (!$user_id) respond('error', 'user_id is required.');
 
         $conn = getConnection();
-
-        // Get modules the student is enrolled in via the enrollments table
         $stmt = $conn->prepare("
             SELECT
-                m.id,
-                m.title,
-                m.description,
-                m.subject_code,
-                m.teacher_id,
+                s.id,
+                s.subject_name,
+                s.description,
+                s.subject_code,
+                s.teacher_id,
                 CONCAT(t.first_name, ' ', t.last_name) AS teacher_name,
                 e.enrolled_at,
                 COALESCE(
                     ROUND(
                         (SELECT COUNT(*) FROM lesson_progress lp
                          JOIN lessons l ON lp.lesson_id = l.id
-                         WHERE lp.user_id = ? AND l.module_id = m.id AND lp.completed = 1)
+                         WHERE lp.user_id = ? AND l.subject_id = s.id AND lp.completed = 1)
                         /
-                        NULLIF((SELECT COUNT(*) FROM lessons l2 WHERE l2.module_id = m.id), 0)
+                        NULLIF((SELECT COUNT(*) FROM lessons l2 WHERE l2.subject_id = s.id), 0)
                         * 100
                     ), 0
                 ) AS progress
             FROM enrollments e
-            JOIN modules m ON e.module_id = m.id
-            LEFT JOIN users t ON m.teacher_id = t.id
+            JOIN subjects s ON e.subject_id = s.id
+            LEFT JOIN users t ON s.teacher_id = t.id
             WHERE e.student_id = ?
             ORDER BY e.enrolled_at DESC
         ");
         $stmt->bind_param("ii", $user_id, $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
-
-        $modules = [];
+        $subjects = [];
         while ($row = $result->fetch_assoc()) {
-            $modules[] = $row;
+            $subjects[] = $row;
         }
-
-        respond('success', 'Enrolled modules retrieved.', $modules);
+        respond('success', 'Enrolled subjects retrieved.', $subjects);
         break;
 
     case 'logout':
