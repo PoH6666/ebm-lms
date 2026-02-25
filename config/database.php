@@ -1,14 +1,18 @@
 <?php
 ob_start();
-define('DB_HOST', 'mysql.railway.internal');
-define('DB_PORT', 3306);
-define('DB_USER', 'root');
-define('DB_PASS', 'qErxeJhOQobMRAaKZBqhKGnxQIjvWzxh');
-define('DB_NAME', 'railway');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+define('DB_HOST', getenv('MYSQLHOST'));
+define('DB_PORT', getenv('MYSQLPORT') ?: 3306);
+define('DB_USER', getenv('MYSQLUSER'));
+define('DB_PASS', getenv('MYSQLPASSWORD'));
+define('DB_NAME', getenv('MYSQLDATABASE'));
+
 function getConnection() {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, (int)DB_PORT);
     if ($conn->connect_error) {
-        ob_end_clean();
         http_response_code(500);
         echo json_encode([
             'status'  => 'error',
