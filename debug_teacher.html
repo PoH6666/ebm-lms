@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Teacher API Debug</title>
+<style>
+body { font-family: monospace; background: #0a0f2c; color: #e8eaf6; padding: 30px; }
+h2 { color: #5b7fff; margin-bottom: 16px; }
+pre { background: #111836; padding: 16px; border-radius: 8px; white-space: pre-wrap; word-break: break-all; margin-bottom: 20px; border: 1px solid rgba(255,255,255,.1); }
+button { background: #5b7fff; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-right: 10px; margin-bottom: 10px; }
+.ok  { color: #7dde7d; }
+.err { color: #de7d7d; }
+label { display: block; margin-bottom: 6px; font-size: 12px; color: #8892b0; text-transform: uppercase; }
+input { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; padding: 8px 12px; color: #e8eaf6; width: 300px; margin-bottom: 12px; font-family: monospace; }
+</style>
+</head>
+<body>
+<h2>🔧 Teacher API Debugger</h2>
+
+<p>Teacher ID from localStorage: <strong id="uid">—</strong></p>
+<br>
+
+<h3>Test 1: GET ping (no action)</h3>
+<button onclick="testGet()">Run GET /api/teacher.php</button>
+<pre id="out1">—</pre>
+
+<h3>Test 2: POST get_my_subjects</h3>
+<button onclick="testSubjects()">Run get_my_subjects</button>
+<pre id="out2">—</pre>
+
+<h3>Test 3: POST create_subject</h3>
+<label>Subject Name</label>
+<input type="text" id="t-name" value="Test Subject">
+<label>Subject Code</label>
+<input type="text" id="t-code" value="TEST01">
+<br>
+<button onclick="testCreate()">Run create_subject</button>
+<pre id="out3">—</pre>
+
+<h3>Raw PHP info (check if PHP works at all)</h3>
+<button onclick="testPhpInfo()">Check /api/teacher.php?action=ping</button>
+<pre id="out4">—</pre>
+
+<script>
+const user = JSON.parse(localStorage.getItem('ebm_user') || '{}');
+document.getElementById('uid').textContent = user.id || 'NOT FOUND — not logged in!';
+
+async function raw(url, opts) {
+  try {
+    const res = await fetch(url, opts);
+    const status = res.status;
+    const text = await res.text();
+    return { status, text };
+  } catch(e) {
+    return { status: 'NETWORK_ERROR', text: e.message };
+  }
+}
+
+async function testGet() {
+  const el = document.getElementById('out1');
+  el.textContent = 'Loading…';
+  const r = await raw('/api/teacher.php', { method: 'GET' });
+  el.textContent = `HTTP ${r.status}\n\n${r.text || '(empty response)'}`;
+  el.className = r.text.includes('"status"') ? 'ok' : 'err';
+}
+
+async function testSubjects() {
+  const el = document.getElementById('out2');
+  el.textContent = 'Loading…';
+  const fd = new FormData();
+  fd.append('action', 'get_my_subjects');
+  fd.append('teacher_id', user.id || 0);
+  const r = await raw('/api/teacher.php', { method: 'POST', body: fd });
+  el.textContent = `HTTP ${r.status}\n\n${r.text || '(empty response)'}`;
+  el.className = r.text.includes('"success"') ? 'ok' : 'err';
+}
+
+async function testCreate() {
+  const el = document.getElementById('out3');
+  el.textContent = 'Loading…';
+  const fd = new FormData();
+  fd.append('action', 'create_subject');
+  fd.append('teacher_id', user.id || 0);
+  fd.append('subject_name', document.getElementById('t-name').value);
+  fd.append('subject_code', document.getElementById('t-code').value);
+  fd.append('description', 'Debug test subject');
+  const r = await raw('/api/teacher.php', { method: 'POST', body: fd });
+  el.textContent = `HTTP ${r.status}\n\n${r.text || '(empty response)'}`;
+  el.className = r.text.includes('"success"') ? 'ok' : 'err';
+}
+
+async function testPhpInfo() {
+  const el = document.getElementById('out4');
+  el.textContent = 'Loading…';
+  const r = await raw('/api/teacher.php?action=ping', { method: 'GET' });
+  el.textContent = `HTTP ${r.status}\n\n${r.text || '(empty response — PHP file may be missing or returning nothing)'}`;
+}
+</script>
+</body>
+</html>
