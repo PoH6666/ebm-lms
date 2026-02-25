@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBM LMS — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/dashboard.css">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🎓</div>
+            EBM <span>LMS</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <a href="dashboard.html" class="nav-item active">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="module.html" class="nav-item">
+                <span class="nav-icon">📚</span> Modules
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📝</span> Assignments
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📊</span> Grades
+            </a>
+
+            <div class="nav-section-label">School</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">✅</span> Attendance
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔔</span> Announcements
+                <span class="badge">3</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📅</span> Schedule
+            </a>
+
+            <div class="nav-section-label">Account</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👤</span> Profile
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙️</span> Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <div class="user-details">
+                    <div class="user-name">Juan Dela Cruz</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+            <a href="login.html" class="logout-btn" title="Logout">⏻</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>Good morning, Juan! 👋</h1>
+                <p>Here's what's happening today — Monday, February 2025</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search modules, assignments..." />
+                </div>
+                <div class="notif-btn">🔔 <span class="notif-dot"></span></div>
+            </div>
+        </header>
+
+        <!-- STATS CARDS -->
+        <section class="stats-grid">
+            <div class="stat-card blue">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Enrolled Modules</div>
+                </div>
+                <div class="stat-trend">↑ Active</div>
+            </div>
+            <div class="stat-card cyan">
+                <div class="stat-icon">📝</div>
+                <div class="stat-info">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Pending Tasks</div>
+                </div>
+                <div class="stat-trend">Due soon</div>
+            </div>
+            <div class="stat-card gold">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <div class="stat-number">88%</div>
+                    <div class="stat-label">Average Grade</div>
+                </div>
+                <div class="stat-trend">↑ +2%</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
+                <div class="stat-trend">Excellent</div>
+            </div>
+        </section>
+
+        <!-- MAIN GRID -->
+        <div class="content-grid">
+
+            <!-- MODULES -->
+            <section class="card modules-card">
+                <div class="card-header">
+                    <h2>My Modules</h2>
+                    <a href="module.html" class="card-link">View all →</a>
+                </div>
+                <div class="modules-list">
+                    <div class="module-item" onclick="window.location.href='module.html'">
+                        <div class="module-color blue-dot"></div>
+                        <div class="module-info">
+                            <div class="module-name">Mathematics 101</div>
+                            <div class="module-teacher">Mr. Santos</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+                            <span class="progress-text">72%</span>
+                        </div>
+                    </div>
+                    <div class="module-item" onclick="window.location.href='module.html'">
+                        <div class="module-color cyan-dot"></div>
+                        <div class="module-info">
+                            <div class="module-name">Science & Technology</div>
+                            <div class="module-teacher">Ms. Reyes</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <div class="progress-bar"><div class="progress-fill cyan-fill" style="width:55%"></div></div>
+                            <span class="progress-text">55%</span>
+                        </div>
+                    </div>
+                    <div class="module-item" onclick="window.location.href='module.html'">
+                        <div class="module-color gold-dot"></div>
+                        <div class="module-info">
+                            <div class="module-name">Filipino Literature</div>
+                            <div class="module-teacher">Ms. Garcia</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <div class="progress-bar"><div class="progress-fill gold-fill" style="width:90%"></div></div>
+                            <span class="progress-text">90%</span>
+                        </div>
+                    </div>
+                    <div class="module-item" onclick="window.location.href='module.html'">
+                        <div class="module-color purple-dot"></div>
+                        <div class="module-info">
+                            <div class="module-name">English Communication</div>
+                            <div class="module-teacher">Mr. Cruz</div>
+                        </div>
+                        <div class="module-progress-wrap">
+                            <div class="progress-bar"><div class="progress-fill purple-fill" style="width:40%"></div></div>
+                            <span class="progress-text">40%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-column">
+
+                <!-- UPCOMING TASKS -->
+                <section class="card tasks-card">
+                    <div class="card-header">
+                        <h2>Upcoming Tasks</h2>
+                        <a href="#" class="card-link">See all →</a>
+                    </div>
+                    <div class="tasks-list">
+                        <div class="task-item urgent">
+                            <div class="task-dot"></div>
+                            <div class="task-info">
+                                <div class="task-name">Math Problem Set 3</div>
+                                <div class="task-due">Due: Tomorrow</div>
+                            </div>
+                            <span class="task-badge urgent-badge">Urgent</span>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-dot blue-task"></div>
+                            <div class="task-info">
+                                <div class="task-name">Science Lab Report</div>
+                                <div class="task-due">Due: Feb 28</div>
+                            </div>
+                            <span class="task-badge">Pending</span>
+                        </div>
+                        <div class="task-item">
+                            <div class="task-dot gold-task"></div>
+                            <div class="task-info">
+                                <div class="task-name">Filipino Essay</div>
+                                <div class="task-due">Due: Mar 2</div>
+                            </div>
+                            <span class="task-badge">Pending</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANNOUNCEMENTS -->
+                <section class="card announcements-card">
+                    <div class="card-header">
+                        <h2>Announcements</h2>
+                        <span class="badge-count">3 new</span>
+                    </div>
+                    <div class="announcements-list">
+                        <div class="announcement-item">
+                            <div class="ann-icon">📢</div>
+                            <div class="ann-info">
+                                <div class="ann-title">Midterm Exam Schedule Released</div>
+                                <div class="ann-meta">Admin • 2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="announcement-item">
+                            <div class="ann-icon">📅</div>
+                            <div class="ann-info">
+                                <div class="ann-title">No classes on Feb 25</div>
+                                <div class="ann-meta">Admin • Yesterday</div>
+                            </div>
+                        </div>
+                        <div class="announcement-item">
+                            <div class="ann-icon">📝</div>
+                            <div class="ann-info">
+                                <div class="ann-title">New Science module uploaded</div>
+                                <div class="ann-meta">Ms. Reyes • 2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Animate stat numbers
+        document.querySelectorAll('.stat-number').forEach(el => {
+            const target = el.textContent;
+            const isPercent = target.includes('%');
+            const num = parseInt(target);
+            let current = 0;
+            const step = Math.ceil(num / 40);
+            const timer = setInterval(() => {
+                current = Math.min(current + step, num);
+                el.textContent = current + (isPercent ? '%' : '');
+                if (current >= num) clearInterval(timer);
+            }, 30);
+        });
+    </script>
+</body>
+</html>

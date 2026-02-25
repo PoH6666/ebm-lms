@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBM LMS — Modules</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/module.css">
+</head>
+<body>
+
+    <!-- SIDEBAR (same as dashboard) -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">🎓</div>
+            EBM <span>LMS</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="module.html" class="nav-item active">
+                <span class="nav-icon">📚</span> Modules
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📝</span> Assignments
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📊</span> Grades
+            </a>
+            <div class="nav-section-label">School</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">✅</span> Attendance
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔔</span> Announcements
+                <span class="badge">3</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📅</span> Schedule
+            </a>
+            <div class="nav-section-label">Account</div>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">👤</span> Profile
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙️</span> Settings
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <div class="user-details">
+                    <div class="user-name">Juan Dela Cruz</div>
+                    <div class="user-role">Student</div>
+                </div>
+            </div>
+            <a href="login.html" class="logout-btn" title="Logout">⏻</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1>My Modules 📚</h1>
+                <p>All your enrolled subjects and learning materials</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search modules..." oninput="filterModules(this.value)" />
+                </div>
+            </div>
+        </header>
+
+        <!-- FILTER TABS -->
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="setFilter('all', this)">All Modules</button>
+            <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
+            <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
+            <button class="filter-btn" onclick="setFilter('not-started', this)">Not Started</button>
+        </div>
+
+        <!-- MODULE GRID -->
+        <div class="modules-grid" id="modules-grid">
+
+            <!-- MODULE CARD 1 -->
+            <div class="module-card" data-status="ongoing" onclick="openModule('math')">
+                <div class="module-card-header blue-header">
+                    <div class="module-emoji">📐</div>
+                    <span class="module-status-tag ongoing-tag">Ongoing</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">Mathematics 101</div>
+                    <div class="module-teacher">👨‍🏫 Mr. Santos</div>
+                    <p class="module-desc">Covers algebra, geometry, and trigonometry fundamentals for Grade 11 students.</p>
+                    <div class="module-meta">
+                        <span>📖 12 Lessons</span>
+                        <span>📝 4 Quizzes</span>
+                        <span>📋 2 Exams</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">72%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar blue-bar" style="width:72%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Last accessed: Today</span>
+                    <button class="btn-continue blue-btn">Continue →</button>
+                </div>
+            </div>
+
+            <!-- MODULE CARD 2 -->
+            <div class="module-card" data-status="ongoing" onclick="openModule('science')">
+                <div class="module-card-header cyan-header">
+                    <div class="module-emoji">🔬</div>
+                    <span class="module-status-tag ongoing-tag">Ongoing</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">Science & Technology</div>
+                    <div class="module-teacher">👩‍🏫 Ms. Reyes</div>
+                    <p class="module-desc">Explore the world of science through experiments, theories, and modern technology.</p>
+                    <div class="module-meta">
+                        <span>📖 10 Lessons</span>
+                        <span>📝 3 Quizzes</span>
+                        <span>🧪 2 Labs</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">55%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar cyan-bar" style="width:55%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Last accessed: Yesterday</span>
+                    <button class="btn-continue cyan-btn">Continue →</button>
+                </div>
+            </div>
+
+            <!-- MODULE CARD 3 -->
+            <div class="module-card" data-status="completed" onclick="openModule('filipino')">
+                <div class="module-card-header gold-header">
+                    <div class="module-emoji">📜</div>
+                    <span class="module-status-tag completed-tag">Completed</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">Filipino Literature</div>
+                    <div class="module-teacher">👩‍🏫 Ms. Garcia</div>
+                    <p class="module-desc">A deep dive into Filipino literary works, from folk tales to modern poetry and prose.</p>
+                    <div class="module-meta">
+                        <span>📖 8 Lessons</span>
+                        <span>📝 3 Quizzes</span>
+                        <span>✍️ 1 Essay</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">100%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar gold-bar" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Completed: Feb 15</span>
+                    <button class="btn-continue gold-btn">Review →</button>
+                </div>
+            </div>
+
+            <!-- MODULE CARD 4 -->
+            <div class="module-card" data-status="ongoing" onclick="openModule('english')">
+                <div class="module-card-header purple-header">
+                    <div class="module-emoji">💬</div>
+                    <span class="module-status-tag ongoing-tag">Ongoing</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">English Communication</div>
+                    <div class="module-teacher">👨‍🏫 Mr. Cruz</div>
+                    <p class="module-desc">Improve reading, writing, speaking, and listening skills for academic and professional use.</p>
+                    <div class="module-meta">
+                        <span>📖 14 Lessons</span>
+                        <span>📝 5 Quizzes</span>
+                        <span>🎤 1 Oral</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">40%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar purple-bar" style="width:40%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Last accessed: 3 days ago</span>
+                    <button class="btn-continue purple-btn">Continue →</button>
+                </div>
+            </div>
+
+            <!-- MODULE CARD 5 -->
+            <div class="module-card" data-status="not-started" onclick="openModule('history')">
+                <div class="module-card-header green-header">
+                    <div class="module-emoji">🌏</div>
+                    <span class="module-status-tag notstarted-tag">Not Started</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">Philippine History</div>
+                    <div class="module-teacher">👨‍🏫 Mr. Mendoza</div>
+                    <p class="module-desc">Study the rich history of the Philippines from pre-colonial times to the modern era.</p>
+                    <div class="module-meta">
+                        <span>📖 16 Lessons</span>
+                        <span>📝 4 Quizzes</span>
+                        <span>📋 1 Exam</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar green-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Starts: Mar 1, 2025</span>
+                    <button class="btn-continue green-btn">Start →</button>
+                </div>
+            </div>
+
+            <!-- MODULE CARD 6 -->
+            <div class="module-card" data-status="not-started" onclick="openModule('pe')">
+                <div class="module-card-header pink-header">
+                    <div class="module-emoji">⚽</div>
+                    <span class="module-status-tag notstarted-tag">Not Started</span>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-subject">Physical Education</div>
+                    <div class="module-teacher">👨‍🏫 Coach Bautista</div>
+                    <p class="module-desc">Physical fitness, team sports, and wellness principles for a healthy and active lifestyle.</p>
+                    <div class="module-meta">
+                        <span>📖 6 Lessons</span>
+                        <span>🏃 4 Activities</span>
+                        <span>📋 1 Exam</span>
+                    </div>
+                    <div class="module-progress-section">
+                        <div class="progress-header">
+                            <span>Progress</span>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar pink-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="module-card-footer">
+                    <span class="last-activity">Starts: Mar 1, 2025</span>
+                    <button class="btn-continue pink-btn">Start →</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODULE DETAIL PANEL (slide-in) -->
+        <div class="module-panel" id="module-panel">
+            <div class="panel-overlay" onclick="closeModule()"></div>
+            <div class="panel-content">
+                <div class="panel-header">
+                    <div>
+                        <h2 id="panel-title">Mathematics 101</h2>
+                        <p id="panel-teacher">Mr. Santos</p>
+                    </div>
+                    <button class="panel-close" onclick="closeModule()">✕</button>
+                </div>
+                <div class="panel-lessons">
+                    <h3>Lessons</h3>
+                    <div class="lesson-list">
+                        <div class="lesson-item done"><span class="lesson-check">✓</span><span>Lesson 1: Introduction to Algebra</span><span class="lesson-time">45 min</span></div>
+                        <div class="lesson-item done"><span class="lesson-check">✓</span><span>Lesson 2: Linear Equations</span><span class="lesson-time">50 min</span></div>
+                        <div class="lesson-item done"><span class="lesson-check">✓</span><span>Lesson 3: Quadratic Equations</span><span class="lesson-time">60 min</span></div>
+                        <div class="lesson-item active-lesson"><span class="lesson-check current">▶</span><span>Lesson 4: Functions & Graphs</span><span class="lesson-time">55 min</span></div>
+                        <div class="lesson-item locked"><span class="lesson-check lock">🔒</span><span>Lesson 5: Trigonometry Basics</span><span class="lesson-time">65 min</span></div>
+                        <div class="lesson-item locked"><span class="lesson-check lock">🔒</span><span>Lesson 6: Geometry Fundamentals</span><span class="lesson-time">50 min</span></div>
+                    </div>
+                </div>
+                <button class="btn-open-lesson">Open Current Lesson →</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function setFilter(filter, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.module-card').forEach(card => {
+                if (filter === 'all' || card.dataset.status === filter) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterModules(query) {
+            document.querySelectorAll('.module-card').forEach(card => {
+                const name = card.querySelector('.module-subject').textContent.toLowerCase();
+                card.style.display = name.includes(query.toLowerCase()) ? 'flex' : 'none';
+            });
+        }
+
+        function openModule(id) {
+            document.getElementById('module-panel').classList.add('open');
+        }
+
+        function closeModule() {
+            document.getElementById('module-panel').classList.remove('open');
+        }
+    </script>
+</body>
+</html>
