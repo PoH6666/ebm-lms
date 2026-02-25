@@ -299,7 +299,7 @@ async function call(data) {
     const res  = await fetch(API, { method: 'POST', body: fd });
     const text = await res.text();
     try { return JSON.parse(text); }
-    catch(e) { return { status: 'error', message: 'Server returned non-JSON: ' + text.substring(0, 200) }; }
+    catch(e) { const s = text.indexOf("{"); const c = s >= 0 ? text.slice(s) : text; try { return JSON.parse(c); } catch(e2) { return { status: "error", message: "Raw server response: " + text.substring(0,400) }; } }
   } catch(e) {
     return { status: 'error', message: 'Network error: ' + e.message };
   }
