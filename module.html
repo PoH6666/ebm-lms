@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EBM LMS — Modules</title>
+    <title>EBM LMS — Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/module.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
 </head>
 <body>
 
@@ -15,13 +15,14 @@
             <div class="logo-icon">🎓</div>
             EBM <span>LMS</span>
         </div>
+
         <nav class="sidebar-nav">
             <div class="nav-section-label">Main</div>
-            <a href="dashboard.html" class="nav-item">
+            <a href="dashboard.html" class="nav-item active">
                 <span class="nav-icon">🏠</span> Dashboard
             </a>
-            <a href="module.html" class="nav-item active">
-                <span class="nav-icon">📚</span> Modules
+            <a href="subject.html" class="nav-item">
+                <span class="nav-icon">📚</span> Subjects
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📝</span> Assignments
@@ -29,6 +30,7 @@
             <a href="#" class="nav-item">
                 <span class="nav-icon">📊</span> Grades
             </a>
+
             <!-- Teacher-only link (shown via JS) -->
             <div id="teacherNavItem" style="display:none;">
                 <div class="nav-section-label">Teacher</div>
@@ -43,11 +45,12 @@
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">🔔</span> Announcements
-                <span class="badge">0</span>
+                <span class="badge" id="annBadge">0</span>
             </a>
             <a href="#" class="nav-item">
                 <span class="nav-icon">📅</span> Schedule
             </a>
+
             <div class="nav-section-label">Account</div>
             <a href="#" class="nav-item">
                 <span class="nav-icon">👤</span> Profile
@@ -56,6 +59,7 @@
                 <span class="nav-icon">⚙️</span> Settings
             </a>
         </nav>
+
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar" id="sidebarAvatar">?</div>
@@ -74,222 +78,240 @@
         <!-- TOP BAR -->
         <header class="topbar">
             <div class="topbar-left">
-                <h1>My Modules 📚</h1>
-                <p>All your enrolled subjects and learning materials</p>
+                <h1 id="greetingText">Good morning! 👋</h1>
+                <p id="greetingDate">Here's what's happening today</p>
             </div>
             <div class="topbar-right">
                 <div class="search-box">
                     <span>🔍</span>
-                    <input type="text" placeholder="Search modules..." oninput="filterModules(this.value)" />
+                    <input type="text" placeholder="Search modules, assignments..." />
                 </div>
+                <div class="notif-btn">🔔 <span class="notif-dot"></span></div>
             </div>
         </header>
 
-        <!-- FILTER TABS -->
-        <div class="filter-bar">
-            <button class="filter-btn active" onclick="setFilter('all', this)">All Modules</button>
-            <button class="filter-btn" onclick="setFilter('ongoing', this)">Ongoing</button>
-            <button class="filter-btn" onclick="setFilter('completed', this)">Completed</button>
-            <button class="filter-btn" onclick="setFilter('not-started', this)">Not Started</button>
-        </div>
-
-        <!-- MODULE GRID -->
-        <div class="modules-grid" id="modules-grid">
-            <div id="loading-state" style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
-                <div style="font-size:2rem; margin-bottom:12px;">⏳</div>
-                <div>Loading your modules...</div>
+        <!-- STATS CARDS -->
+        <section class="stats-grid">
+            <div class="stat-card blue">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statModules">0</div>
+                    <div class="stat-label" id="statModulesLabel">Enrolled Modules</div>
+                </div>
+                <div class="stat-trend" id="statModulesTrend">—</div>
             </div>
-        </div>
+            <div class="stat-card cyan">
+                <div class="stat-icon">📝</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statTasks">0</div>
+                    <div class="stat-label">Pending Tasks</div>
+                </div>
+                <div class="stat-trend">—</div>
+            </div>
+            <div class="stat-card gold">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statGrade">0%</div>
+                    <div class="stat-label">Average Grade</div>
+                </div>
+                <div class="stat-trend">—</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statAttendance">0%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
+                <div class="stat-trend">—</div>
+            </div>
+        </section>
 
-        <!-- MODULE DETAIL PANEL (slide-in) -->
-        <div class="module-panel" id="module-panel">
-            <div class="panel-overlay" onclick="closeModule()"></div>
-            <div class="panel-content">
-                <div class="panel-header">
-                    <div>
-                        <h2 id="panel-title">Module</h2>
-                        <p id="panel-teacher"></p>
-                    </div>
-                    <button class="panel-close" onclick="closeModule()">✕</button>
+        <!-- MAIN GRID -->
+        <div class="content-grid">
+
+            <!-- MODULES -->
+            <section class="card modules-card">
+                <div class="card-header">
+                    <h2 id="modulesCardTitle">My Subjects</h2>
+                    <a href="subject.html" class="card-link">View all →</a>
                 </div>
-                <div class="panel-lessons">
-                    <h3>Lessons</h3>
-                    <div class="lesson-list" id="panel-lessons-list">
-                        <div style="text-align:center; padding:30px; color:#888;">No lessons available yet.</div>
+                <div class="modules-list" id="modulesList">
+                    <div style="text-align:center; padding: 40px 20px; color: #888;">
+                        <div style="font-size:2rem; margin-bottom:8px;">⏳</div>
+                        <div>Loading...</div>
                     </div>
                 </div>
-                <button class="btn-open-lesson">Open Current Lesson →</button>
+            </section>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-column">
+
+                <!-- UPCOMING TASKS -->
+                <section class="card tasks-card">
+                    <div class="card-header">
+                        <h2>Upcoming Tasks</h2>
+                        <a href="#" class="card-link">See all →</a>
+                    </div>
+                    <div class="tasks-list" id="tasksList">
+                        <div style="text-align:center; padding: 30px 20px; color: #888;">
+                            <div style="font-size:1.5rem; margin-bottom:8px;">📝</div>
+                            <div>No pending tasks.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANNOUNCEMENTS -->
+                <section class="card announcements-card">
+                    <div class="card-header">
+                        <h2>Announcements</h2>
+                        <span class="badge-count" id="annCount">0 new</span>
+                    </div>
+                    <div class="announcements-list" id="announcementsList">
+                        <div style="text-align:center; padding: 30px 20px; color: #888;">
+                            <div style="font-size:1.5rem; margin-bottom:8px;">🔔</div>
+                            <div>No announcements yet.</div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </div>
 
     </main>
 
     <script>
-        const API_BASE = 'https://ebm-lms-production.up.railway.app/auth/auth.php';
+        const TEACH_API = 'https://ebm-lms-production.up.railway.app/api/teacher.php';
+        const AUTH_API  = 'https://ebm-lms-production.up.railway.app/auth/auth.php';
 
         // ── Load user ────────────────────────────────────────────
         const user = JSON.parse(localStorage.getItem('ebm_user') || 'null');
+        if (!user || !user.id) { window.location.href = 'login.html'; }
 
-        if (!user || !user.id) {
-            window.location.href = 'login.html';
-        } else {
-            const firstName = user.first_name || (user.name ? user.name.split(' ')[0] : 'User');
-            const lastName  = user.last_name  || (user.name ? user.name.split(' ').slice(1).join(' ') : '');
-            const fullName  = (firstName + ' ' + lastName).trim();
-            const role      = user.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Student';
+        const firstName = user.first_name || (user.name||'').split(' ')[0] || 'User';
+        const lastName  = user.last_name  || (user.name||'').split(' ').slice(1).join(' ') || '';
+        const fullName  = (firstName + ' ' + lastName).trim();
+        const role      = user.role || 'student';
+        const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
-            document.getElementById('sidebarName').textContent   = fullName;
-            document.getElementById('sidebarRole').textContent   = role;
-            const initials = (firstName[0] || '') + (lastName[0] || '');
-            document.getElementById('sidebarAvatar').textContent = initials.toUpperCase();
+        // Sidebar
+        document.getElementById('sidebarName').textContent   = fullName;
+        document.getElementById('sidebarRole').textContent   = roleLabel;
+        document.getElementById('sidebarAvatar').textContent = ((firstName[0]||'')+(lastName[0]||'')).toUpperCase();
 
-            // Show Teacher Panel link for teachers/admins
-            if (user.role === 'teacher' || user.role === 'admin') {
-                document.getElementById('teacherNavItem').style.display = 'block';
-            }
+        // Show Teacher Panel link only for teachers/admins
+        if (role === 'teacher' || role === 'admin') {
+            document.getElementById('teacherNavItem').style.display = 'block';
         }
+
+        // Greeting
+        const hour = new Date().getHours();
+        const timeOfDay = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        document.getElementById('greetingText').textContent = `Good ${timeOfDay}, ${firstName}! 👋`;
+        const now = new Date();
+        document.getElementById('greetingDate').textContent =
+            `Here's what's happening today — ${now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}`;
 
         // Logout
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('ebm_user');
-            window.location.href = 'login.html';
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault(); localStorage.removeItem('ebm_user'); window.location.href = 'login.html';
         });
 
-        // ── Card colors cycle ────────────────────────────────────
-        const colorSchemes = [
-            { header: 'blue-header',   bar: 'blue-bar',   btn: 'blue-btn'   },
-            { header: 'cyan-header',   bar: 'cyan-bar',   btn: 'cyan-btn'   },
-            { header: 'gold-header',   bar: 'gold-bar',   btn: 'gold-btn'   },
-            { header: 'purple-header', bar: 'purple-bar', btn: 'purple-btn' },
-            { header: 'green-header',  bar: 'green-bar',  btn: 'green-btn'  },
-            { header: 'pink-header',   bar: 'pink-bar',   btn: 'pink-btn'   },
-        ];
-
-        const moduleEmojis = ['📐','🔬','📜','💬','🌏','⚽','🎨','🎵','💻','📊'];
-
-        function getStatus(progress) {
-            if (progress >= 100) return { label: 'Completed',   tag: 'completed-tag',   dataStatus: 'completed'  };
-            if (progress > 0)    return { label: 'Ongoing',     tag: 'ongoing-tag',     dataStatus: 'ongoing'    };
-            return                      { label: 'Not Started', tag: 'notstarted-tag',  dataStatus: 'not-started'};
+        // ── Helpers ──────────────────────────────────────────────
+        function esc(s) {
+            if (!s) return '';
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
 
-        function getBtnLabel(progress) {
-            if (progress >= 100) return 'Review →';
-            if (progress > 0)    return 'Continue →';
-            return 'Start →';
-        }
+        const colors = ['blue-dot','cyan-dot','gold-dot','purple-dot','green-dot','pink-dot'];
+        const fills  = ['','cyan-fill','gold-fill','purple-fill','',''];
 
-        // ── Render modules ───────────────────────────────────────
-        function renderModules(modules) {
-            const grid = document.getElementById('modules-grid');
-
-            if (!modules || modules.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#888;">
-                        <div style="font-size:3rem; margin-bottom:16px;">📚</div>
-                        <div style="font-size:1.1rem; margin-bottom:8px;">No modules enrolled yet.</div>
-                        <div style="font-size:0.9rem;">Your teacher will enroll you in subjects.</div>
-                    </div>`;
-                return;
+        // ── Load data depending on role ──────────────────────────
+        async function loadDashboard() {
+            if (role === 'teacher' || role === 'admin') {
+                loadTeacherDashboard();
+            } else {
+                loadStudentDashboard();
             }
-
-            grid.innerHTML = modules.map((mod, i) => {
-                const scheme  = colorSchemes[i % colorSchemes.length];
-                const emoji   = moduleEmojis[i % moduleEmojis.length];
-                const status  = getStatus(Number(mod.progress || 0));
-                const btnText = getBtnLabel(Number(mod.progress || 0));
-                const progress = Number(mod.progress || 0);
-                const teacher = mod.teacher_name ? `👨‍🏫 ${mod.teacher_name}` : '—';
-                const desc    = mod.description || 'No description available.';
-
-                return `
-                <div class="module-card" data-status="${status.dataStatus}" data-id="${mod.id}" onclick="openModule(${mod.id}, '${escHtml(mod.title)}', '${escHtml(mod.teacher_name || '')}')">
-                    <div class="module-card-header ${scheme.header}">
-                        <div class="module-emoji">${emoji}</div>
-                        <span class="module-status-tag ${status.tag}">${status.label}</span>
-                    </div>
-                    <div class="module-card-body">
-                        <div class="module-subject">${escHtml(mod.title)}</div>
-                        <div class="module-teacher">${teacher}</div>
-                        <p class="module-desc">${escHtml(desc)}</p>
-                        <div class="module-progress-section">
-                            <div class="progress-header">
-                                <span>Progress</span>
-                                <span class="progress-percent">${progress}%</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-bar ${scheme.bar}" style="width:${progress}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="module-card-footer">
-                        <span class="last-activity">Enrolled: ${formatDate(mod.enrolled_at)}</span>
-                        <button class="btn-continue ${scheme.btn}">${btnText}</button>
-                    </div>
-                </div>`;
-            }).join('');
         }
 
-        function escHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return '—';
+        // ── STUDENT dashboard ────────────────────────────────────
+        async function loadStudentDashboard() {
             try {
-                return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            } catch(e) { return dateStr; }
-        }
-
-        // ── Fetch enrolled modules ───────────────────────────────
-        async function loadModules() {
-            try {
-                const res  = await fetch(`${API_BASE}?action=get_enrolled_modules&user_id=${user.id}`);
+                const res  = await fetch(`${AUTH_API}?action=get_enrolled_modules&user_id=${user.id}`);
                 const data = await res.json();
-                document.getElementById('loading-state')?.remove();
-                if (data.status === 'success') {
-                    renderModules(data.data);
+                const modules = (data.status === 'success') ? data.data : [];
+
+                // Update stat
+                document.getElementById('statModules').textContent = modules.length;
+                if (modules.length > 0) document.getElementById('statModulesTrend').textContent = '↑ Active';
+
+                // Render modules list
+                const list = document.getElementById('modulesList');
+                if (modules.length === 0) {
+                    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;">
+                        <div style="font-size:2rem;margin-bottom:8px;">📚</div>
+                        <div>No modules enrolled yet.</div></div>`;
                 } else {
-                    renderModules([]);
+                    list.innerHTML = modules.slice(0,4).map((m, i) => `
+                        <div class="module-item" onclick="window.location.href='module.html'">
+                            <div class="module-color ${colors[i % colors.length]}"></div>
+                            <div class="module-info">
+                                <div class="module-name">${esc(m.subject_name)}</div>
+                                <div class="module-teacher">${esc(m.teacher_name||'—')}</div>
+                            </div>
+                            <div class="module-progress-wrap">
+                                <div class="progress-bar">
+                                    <div class="progress-fill ${fills[i % fills.length]}" style="width:${m.progress||0}%"></div>
+                                </div>
+                                <span class="progress-text">${m.progress||0}%</span>
+                            </div>
+                        </div>`).join('');
                 }
             } catch(e) {
-                document.getElementById('loading-state')?.remove();
-                renderModules([]);
+                document.getElementById('modulesList').innerHTML =
+                    '<div style="text-align:center;padding:40px 20px;color:#888;">Could not load modules.</div>';
             }
         }
 
-        loadModules();
+        // ── TEACHER dashboard ────────────────────────────────────
+        async function loadTeacherDashboard() {
+            // Update labels for teacher view
+            document.getElementById('statModulesLabel').textContent = 'My Subjects';
+            document.getElementById('modulesCardTitle').textContent  = 'My Subjects';
 
-        // ── Filter & Search ──────────────────────────────────────
-        function setFilter(filter, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.module-card').forEach(card => {
-                card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
-            });
+            try {
+                const res  = await fetch(`${TEACH_API}?action=get_my_subjects&teacher_id=${user.id}`);
+                const data = await res.json();
+                const modules = (data.status === 'success') ? data.data : [];
+
+                document.getElementById('statModules').textContent = modules.length;
+                if (modules.length > 0) document.getElementById('statModulesTrend').textContent = '↑ Active';
+
+                const list = document.getElementById('modulesList');
+                if (modules.length === 0) {
+                    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;">
+                        <div style="font-size:2rem;margin-bottom:8px;">📦</div>
+                        <div>No subjects yet. <a href="teacher.html" style="color:#6c63ff;">Create one →</a></div></div>`;
+                } else {
+                    list.innerHTML = modules.slice(0,4).map((m, i) => `
+                        <div class="module-item" onclick="window.location.href='teacher.html'">
+                            <div class="module-color ${colors[i % colors.length]}"></div>
+                            <div class="module-info">
+                                <div class="module-name">${esc(m.subject_name)}</div>
+                                <div class="module-teacher">${esc(m.subject_code||'—')}</div>
+                            </div>
+                            <div class="module-progress-wrap">
+                                <span class="progress-text" style="color:#6c63ff;">Manage →</span>
+                            </div>
+                        </div>`).join('');
+                }
+            } catch(e) {
+                document.getElementById('modulesList').innerHTML =
+                    '<div style="text-align:center;padding:40px 20px;color:#888;">Could not load modules.</div>';
+            }
         }
 
-        function filterModules(query) {
-            document.querySelectorAll('.module-card').forEach(card => {
-                const name = card.querySelector('.module-subject')?.textContent.toLowerCase() || '';
-                card.style.display = name.includes(query.toLowerCase()) ? 'flex' : 'none';
-            });
-        }
-
-        // ── Module panel ─────────────────────────────────────────
-        function openModule(id, title, teacher) {
-            document.getElementById('panel-title').textContent   = title || 'Module';
-            document.getElementById('panel-teacher').textContent = teacher || '';
-            document.getElementById('panel-lessons-list').innerHTML =
-                '<div style="text-align:center;padding:30px;color:#888;">No lessons available yet.</div>';
-            document.getElementById('module-panel').classList.add('open');
-        }
-
-        function closeModule() {
-            document.getElementById('module-panel').classList.remove('open');
-        }
+        loadDashboard();
     </script>
 </body>
 </html>
