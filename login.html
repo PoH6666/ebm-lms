@@ -152,7 +152,7 @@
 
     <script>
         // ─── CONFIG ───────────────────────────────────────────────────────
-        const API_BASE = '/school-portal/auth/auth.php';
+        const API_BASE = 'https://ebm-lms-production.up.railway.app/auth/auth.php';
 
         // ─── STATE ────────────────────────────────────────────────────────
         const selectedRoles = { login: 'student', register: 'student' };
@@ -191,9 +191,8 @@
             btn.style.opacity = loading ? '0.7' : '1';
         }
 
-        // Build URL with GET params (properly encoded)
         function buildUrl(base, params) {
-            const url = new URL(base, window.location.origin);
+            const url = new URL(base);
             Object.entries(params).forEach(([k, v]) => {
                 url.searchParams.set(k, String(v));
             });
@@ -268,9 +267,8 @@
             setLoading('register-btn', true, 'Create Account →');
 
             try {
-                console.log("Fields:", first_name, last_name, email, password, school_id, role);
                 const url = buildUrl(API_BASE, { action: 'register', first_name, last_name, email, password, school_id, role });
-                const res  = await fetch(url, { credentials: 'same-origin' });
+                const res  = await fetch(url);
                 const text = await res.text();
 
                 let data;
