@@ -6,15 +6,15 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    navy: #0a0f2c;        /* Deep navy for headers/backgrounds */
-    navy-mid: #111836;    /* Slightly lighter navy for contrast */
-    blue: #2563ff;        /* Primary light blue for buttons/links */
-    blue-bright: #4f8aff; /* Brighter blue for hover/active states */
-    cyan: #00d4ff;        /* Accent cyan for highlights */
-    white: #ffffff;       /* Pure white for main backgrounds */
-    gray: #8892b0;        /* Neutral gray for text and secondary elements */
-    card-bg: #f0f4ff;     /* Soft white-blue for cards/panels */
-    border: #dce3f5;      /* Light border for subtle separation */
+    --navy: #ffe4ec;        /* soft pastel pink background */
+    --navy-mid: #ffd6e5;    /* slightly deeper pastel pink */
+    --blue: #ff8fb1;        /* primary pastel pink */
+    --blue-bright: #ff6f9f; /* stronger pink for hover */
+    --cyan: #ffb3c7;        /* light pink accent */
+    --white: #ffffff;       /* white background */
+    --gray: #8a6f78;        /* muted mauve gray text */
+    --card-bg: #fff0f5;     /* very soft pink for cards */
+    --border: #f5c6d6;      /* pastel pink border */
 }
 
 body {
@@ -408,6 +408,7 @@ body {
     .right-panel { padding: 32px 24px; }
 
 }
+
 
 
 
