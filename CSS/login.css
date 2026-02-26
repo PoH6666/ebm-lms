@@ -6,15 +6,15 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --navy: #800000;        /* maroon main background */
-    --navy-mid: #a52a2a;    /* lighter maroon */
-    --blue: #800000;        /* main maroon */
-    --blue-bright: #b03030; /* hover maroon */
-    --cyan: #d46a6a;        /* accent maroon */
+    --navy: #7f5fc5;        /* main violet background */
+    --navy-mid: #9b7fd6;    /* lighter violet */
+    --blue: #7f5fc5;        /* primary violet for buttons */
+    --blue-bright: #a18fe0; /* brighter violet hover */
+    --cyan: #c4b3e6;        /* soft violet accent */
     --white: #ffffff;       /* white */
     --gray: #6b6b6b;        /* gray text */
     --card-bg: #ffffff;     /* white cards */
-    --border: #e5e5e5;      /* border */
+    --border: #d9d0ea;      /* soft violet border */
 }
 
 body {
@@ -408,6 +408,7 @@ body {
     .right-panel { padding: 32px 24px; }
 
 }
+
 
 
 
