@@ -7,14 +7,14 @@
 
 :root {
     --navy: #ffffff;        /* left panel white background */
-    --navy-mid: #f7f7f7;    /* slightly lighter for subtle contrast */
-    --blue: #b22222;        /* light maroon for buttons/links */
-    --blue-bright: #e57373; /* brighter maroon for hover/active */
-    --cyan: #ffcdd2;         /* soft red accent */
+    --navy-mid: #f7f7f7;    /* right panel background */
+    --blue: #800000;        /* maroon main color */
+    --blue-bright: #b22222; /* lighter maroon for hover/active */
+    --cyan: #ff9999;        /* soft maroon accent */
     --white: #ffffff;       /* main white */
-    --gray: #6b6b6b;        /* gray text */
+    --gray: #4d4d4d;        /* darker gray for text */
     --card-bg: #ffffff;     /* cards remain white */
-    --border: #d9d0ea;      /* subtle border */
+    --border: #dcdcdc;      /* subtle border */
 }
 
 body {
@@ -296,3 +296,4 @@ body {
     .left-panel { display: none; }
     .right-panel { padding: 32px 24px; }
 }
+
