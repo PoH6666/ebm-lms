@@ -6,15 +6,15 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    navy: #800000;        /* maroon main background */
-    navy-mid: #a52a2a;    /* lighter maroon */
-    blue: #800000;        /* main maroon for buttons */
-    blue-bright: #b03030; /* hover maroon */
-    cyan: #d46a6a;        /* light maroon accent */
-    white: #ffffff;       /* pure white */
-    gray: #6b6b6b;        /* neutral gray text */
-    card-bg: #ffffff;     /* white cards */
-    border: #e5e5e5;      /* soft border */
+    navy: #800000;
+    navy-mid: #a52a2a;
+    blue: #800000;
+    blue-bright: #b03030;
+    cyan: #d46a6a;
+    white: #ffffff;
+    gray: #6b6b6b;
+    card-bg: #ffffff;
+    border: #e5e5e5;
 }
 
 body {
@@ -408,6 +408,7 @@ body {
     .right-panel { padding: 32px 24px; }
 
 }
+
 
 
 
