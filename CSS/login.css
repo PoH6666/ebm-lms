@@ -6,15 +6,15 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    navy: #ffe4ec;        /* soft pastel pink background */
-    navy-mid: #ffd6e5;    /* slightly deeper pastel pink */
-    blue: #ff8fb1;        /* primary pastel pink */
-    blue-bright: #ff6f9f; /* stronger pink for hover */
-    cyan: #ffb3c7;        /* light pink accent */
-    white: #ffffff;       /* white background */
-    gray: #8a6f78;        /* muted mauve gray text */
-    card-bg: #fff0f5;     /* very soft pink for cards */
-    border: #f5c6d6;      /* pastel pink border */
+    navy: #800000;        /* maroon main background */
+    navy-mid: #a52a2a;    /* lighter maroon */
+    blue: #800000;        /* main maroon for buttons */
+    blue-bright: #b03030; /* hover maroon */
+    cyan: #d46a6a;        /* light maroon accent */
+    white: #ffffff;       /* pure white */
+    gray: #6b6b6b;        /* neutral gray text */
+    card-bg: #ffffff;     /* white cards */
+    border: #e5e5e5;      /* soft border */
 }
 
 body {
@@ -408,6 +408,7 @@ body {
     .right-panel { padding: 32px 24px; }
 
 }
+
 
 
 
